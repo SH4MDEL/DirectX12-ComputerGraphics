@@ -12,9 +12,9 @@ void Player::KeyboardEvent(FLOAT timeElapsed)
 {
 	XMFLOAT3 front{ m_camera->GetN() }; front.y = 0.f; 
 	front = Utiles::Vector3::Normalize(front);
-	XMFLOAT3 back{ Utiles::Vector3::Sub(XMFLOAT3{}, m_camera->GetN()) }; back.y = 0.f; 
+	XMFLOAT3 back{ Utiles::Vector3::Negate(m_camera->GetN()) }; back.y = 0.f; 
 	back = Utiles::Vector3::Normalize(back);
-	XMFLOAT3 left{ Utiles::Vector3::Sub(XMFLOAT3{}, m_camera->GetU()) };
+	XMFLOAT3 left{ Utiles::Vector3::Negate(m_camera->GetU()) };
 	XMFLOAT3 right{ m_camera->GetU() };
 	XMFLOAT3 direction{};
 

@@ -13,8 +13,10 @@ Shader::Shader(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12RootSignat
 #endif
 
 	ComPtr<ID3DBlob> mvsByteCode, mpsByteCode;
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VERTEX_MAIN", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PIXEL_MAIN", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr, 
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "VERTEX_MAIN", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr, 
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "PIXEL_MAIN", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
 	psoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };

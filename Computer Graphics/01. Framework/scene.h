@@ -17,7 +17,8 @@ public:
 	void Update(FLOAT timeElapsed);
 	void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
 
-	void BuildObjects(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList, 
+	void BuildObjects(const ComPtr<ID3D12Device>& device, 
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, 
 		const ComPtr<ID3D12RootSignature>& rootSignature);
 	void ReleaseUploadBuffer();
 
@@ -32,4 +33,3 @@ private:
 
 	shared_ptr<Mesh> m_cube;
 };
-

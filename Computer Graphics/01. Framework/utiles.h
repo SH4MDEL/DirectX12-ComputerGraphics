@@ -39,6 +39,10 @@ namespace Utiles
         {
             return XMFLOAT3{ a.x * scalar, a.y * scalar, a.z * scalar };
         }
+        inline XMFLOAT3 Negate(const XMFLOAT3& v)
+        {
+            return XMFLOAT3{ -v.x, -v.y, -v.z };
+        }
         inline XMFLOAT3 Normalize(const XMFLOAT3& v)
         {
             XMFLOAT3 result;

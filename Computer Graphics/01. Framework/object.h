@@ -41,4 +41,3 @@ public:
 private:
 	FLOAT m_rotatingSpeed;
 };
-
