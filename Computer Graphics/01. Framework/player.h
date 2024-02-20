@@ -11,8 +11,6 @@ public:
 	void MouseEvent(FLOAT timeElapsed);
 	void KeyboardEvent(FLOAT timeElapsed);
 	virtual void Update(FLOAT timeElapsed) override;
-	virtual void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const override;
-	virtual void UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList) const override;
 
 	void SetCamera(const shared_ptr<Camera>& camera);
 

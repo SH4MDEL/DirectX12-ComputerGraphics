@@ -95,13 +95,12 @@ CubeMesh::CubeMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12Graphi
 	m_vertices = static_cast<UINT>(vertices.size());
 	const UINT vertexBufferSize = m_vertices * sizeof(Vertex);
 
-	// vertexBufferSize 크기의 디폴트 힙과 업로드 힙 생성.
 	Utiles::ThrowIfFailed(device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
 		D3D12_RESOURCE_STATE_COPY_DEST,
-		NULL,
+		nullptr,
 		IID_PPV_ARGS(&m_vertexBuffer)));
 
 	Utiles::ThrowIfFailed(device->CreateCommittedResource(
@@ -109,21 +108,19 @@ CubeMesh::CubeMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12Graphi
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
-		NULL,
+		nullptr,
 		IID_PPV_ARGS(&m_vertexUploadBuffer)));
 
-	// DEFAULT 버퍼에 데이터 복사
 	D3D12_SUBRESOURCE_DATA vertexData{};
 	vertexData.pData = vertices.data();
 	vertexData.RowPitch = vertexBufferSize;
 	vertexData.SlicePitch = vertexData.RowPitch;
-	UpdateSubresources<1>(commandList.Get(), m_vertexBuffer.Get(), m_vertexUploadBuffer.Get(), 0, 0, 1, &vertexData);
+	UpdateSubresources<1>(commandList.Get(), 
+		m_vertexBuffer.Get(), m_vertexUploadBuffer.Get(), 0, 0, 1, &vertexData);
 
-	// 정점 버퍼 상태 변경
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_vertexBuffer.Get(),
 		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 
-	// 정점 버퍼 뷰 설정
 	m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
 	m_vertexBufferView.SizeInBytes = vertexBufferSize;
 	m_vertexBufferView.StrideInBytes = sizeof(Vertex);
@@ -174,8 +171,6 @@ CubeIndexMesh::CubeIndexMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID
 	m_vertices = static_cast<UINT>(vertices.size());
 	const UINT vertexBufferSize = m_vertices * sizeof(Vertex);
 
-
-	// vertexBufferSize 크기의 디폴트 힙과 업로드 힙 생성.
 	Utiles::ThrowIfFailed(device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
@@ -192,14 +187,12 @@ CubeIndexMesh::CubeIndexMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID
 		NULL,
 		IID_PPV_ARGS(&m_vertexUploadBuffer)));
 
-	// DEFAULT 버퍼에 데이터 복사
 	D3D12_SUBRESOURCE_DATA vertexData{};
 	vertexData.pData = vertices.data();
 	vertexData.RowPitch = vertexBufferSize;
 	vertexData.SlicePitch = vertexData.RowPitch;
 	UpdateSubresources<1>(commandList.Get(), m_vertexBuffer.Get(), m_vertexUploadBuffer.Get(), 0, 0, 1, &vertexData);
 
-	// 정점 버퍼 상태 변경
 	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_vertexBuffer.Get(),
 		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 

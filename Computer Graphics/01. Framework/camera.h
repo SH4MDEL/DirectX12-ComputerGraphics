@@ -28,13 +28,13 @@ protected:
 	XMFLOAT4X4 m_viewMatrix;
 	XMFLOAT4X4 m_projectionMatrix;
 
-	XMFLOAT3 m_eye;		// 카메라 위치
-	XMFLOAT3 m_at;		// 카메라가 바라보는 방향
-	XMFLOAT3 m_up;		// 대략적인 위
+	XMFLOAT3 m_eye;
+	XMFLOAT3 m_at;
+	XMFLOAT3 m_up;
 
-	XMFLOAT3 m_u;		// 카메라 공간 x축 기저
-	XMFLOAT3 m_v;		// 카메라 공간 y축 기저
-	XMFLOAT3 m_n;		// 카메라 공간 z축 기저
+	XMFLOAT3 m_u;
+	XMFLOAT3 m_v;
+	XMFLOAT3 m_n;
 };
 
 class ThirdPersonCamera : public Camera

@@ -12,10 +12,9 @@ void Player::KeyboardEvent(FLOAT timeElapsed)
 {
 	XMFLOAT3 front{ m_camera->GetN() }; front.y = 0.f; 
 	front = Utiles::Vector3::Normalize(front);
-	XMFLOAT3 back{ Utiles::Vector3::Negate(m_camera->GetN()) }; back.y = 0.f; 
-	back = Utiles::Vector3::Normalize(back);
-	XMFLOAT3 left{ Utiles::Vector3::Negate(m_camera->GetU()) };
+	XMFLOAT3 back{ Utiles::Vector3::Negate(front) };
 	XMFLOAT3 right{ m_camera->GetU() };
+	XMFLOAT3 left{ Utiles::Vector3::Negate(right) };
 	XMFLOAT3 direction{};
 
 	if (GetAsyncKeyState('W') && GetAsyncKeyState('A') & 0x8000) {
@@ -42,8 +41,8 @@ void Player::KeyboardEvent(FLOAT timeElapsed)
 	else if (GetAsyncKeyState('D') & 0x8000) {
 		direction = right;
 	}
-	if ((GetAsyncKeyState('W') & 0x8000) || (GetAsyncKeyState('A') & 0x8000) ||
-		(GetAsyncKeyState('S') & 0x8000) || (GetAsyncKeyState('D') & 0x8000)) {
+	if (GetAsyncKeyState('W') || GetAsyncKeyState('A') ||
+		GetAsyncKeyState('S') || (GetAsyncKeyState('D') & 0x8000)) {
 		XMFLOAT3 angle{ Utiles::Vector3::Angle(m_front, direction) };
 		XMFLOAT3 cross{ Utiles::Vector3::Cross(m_front, direction) };
 		if (cross.y >= 0.f) {
@@ -60,18 +59,6 @@ void Player::KeyboardEvent(FLOAT timeElapsed)
 void Player::Update(FLOAT timeElapsed)
 {
 	if (m_camera) m_camera->UpdateEye(GetPosition());
-}
-
-void Player::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
-{
-	Player::UpdateShaderVariable(commandList);
-	m_mesh->Render(commandList);
-}
-
-void Player::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
-{
-	GameObject::UpdateShaderVariable(commandList);
-	if (m_camera) m_camera->UpdateShaderVariable(commandList);
 }
 
 void Player::SetCamera(const shared_ptr<Camera>& camera)

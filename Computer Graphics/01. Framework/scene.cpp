@@ -46,11 +46,12 @@ void Scene::Update(FLOAT timeElapsed)
 
 void Scene::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
 {
+	m_camera->UpdateShaderVariable(commandList);
 	m_shader->UpdateShaderVariable(commandList);
-	m_player->Render(commandList);
 	for (auto& object : m_objects) {
 		object->Render(commandList);
 	}
+	m_player->Render(commandList);
 }
 
 void Scene::BuildObjects(const ComPtr<ID3D12Device>& device, 
@@ -86,6 +87,7 @@ void Scene::BuildObjects(const ComPtr<ID3D12Device>& device,
 void Scene::ReleaseUploadBuffer()
 {
 	m_cube->ReleaseUploadBuffer();
+
 }
 
 void Scene::MouseEvent(UINT message, LPARAM lParam)

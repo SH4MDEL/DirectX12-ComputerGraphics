@@ -15,15 +15,15 @@ struct VS_INPUT
     float4 color : COLOR;
 };
 
-struct VS_OUTPUT
+struct PS_INPUT
 {
     float4 position : SV_POSITION;
     float4 color : COLOR;
 };
 
-VS_OUTPUT VERTEX_MAIN(VS_INPUT input)
+PS_INPUT VERTEX_MAIN(VS_INPUT input)
 {
-    VS_OUTPUT output;
+    PS_INPUT output;
     output.position = mul(float4(input.position, 1.0f), g_worldMatrix);
     output.position = mul(output.position, g_viewMatrix);
     output.position = mul(output.position, g_projectionMatrix);
@@ -32,7 +32,7 @@ VS_OUTPUT VERTEX_MAIN(VS_INPUT input)
     return output;
 }
 
-float4 PIXEL_MAIN(VS_OUTPUT input) : SV_TARGET
+float4 PIXEL_MAIN(PS_INPUT input) : SV_TARGET
 {
     return input.color;
 }

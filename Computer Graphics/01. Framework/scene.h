@@ -32,4 +32,5 @@ private:
 	vector<shared_ptr<GameObject>> m_objects;
 
 	shared_ptr<Mesh> m_cube;
+
 };
