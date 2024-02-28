@@ -39,7 +39,7 @@ private:
 
 private:
 	unordered_map<string, shared_ptr<Shader>> m_shaders;
-	unordered_map<string, shared_ptr<Mesh>> m_meshes;
+	unordered_map<string, shared_ptr<MeshBase>> m_meshes;
 	unordered_map<string, shared_ptr<Texture>> m_textures;
 
 	shared_ptr<Camera> m_camera;

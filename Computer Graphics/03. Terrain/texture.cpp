@@ -10,6 +10,8 @@ Texture::Texture(const ComPtr<ID3D12Device>& device,
 	const ComPtr<ID3D12GraphicsCommandList>& commandList, 
 	const wstring& fileName, UINT rootParameterIndex, BOOL createResourceView)
 {
+	m_srvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
 	LoadTexture(device, commandList, fileName, rootParameterIndex);
 	if (createResourceView) CreateShaderVariable(device);
 }

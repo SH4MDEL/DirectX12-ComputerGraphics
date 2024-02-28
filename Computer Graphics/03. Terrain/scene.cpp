@@ -87,10 +87,10 @@ inline void Scene::BuildShaders(const ComPtr<ID3D12Device>& device,
 inline void Scene::BuildMeshes(const ComPtr<ID3D12Device>& device,
 	const ComPtr<ID3D12GraphicsCommandList>& commandList)
 {
-	auto cube = make_shared<CubeMesh>(device, commandList,
+	auto cube = make_shared<Mesh<TextureVertex>>(device, commandList,
 		TEXT("../Resources/Meshes/CubeMesh.binary"));
 	m_meshes.insert({ "CUBE", cube });
-	auto skyboxMesh = make_shared<SkyboxMesh>(device, commandList,
+	auto skyboxMesh = make_shared<Mesh<Vertex>>(device, commandList,
 		TEXT("../Resources/Meshes/SkyboxMesh.binary"));
 	m_meshes.insert({ "SKYBOX", skyboxMesh });
 	auto terrainMesh = make_shared<TerrainMesh>(device, commandList,

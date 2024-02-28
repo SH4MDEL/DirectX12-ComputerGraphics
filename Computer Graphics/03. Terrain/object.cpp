@@ -40,7 +40,7 @@ void GameObject::Rotate(FLOAT pitch, FLOAT yaw, FLOAT roll)
 	XMStoreFloat3(&m_front, XMVector3TransformNormal(XMLoadFloat3(&m_front), rotate));
 }
 
-void GameObject::SetMesh(const shared_ptr<Mesh>& mesh)
+void GameObject::SetMesh(const shared_ptr<MeshBase>& mesh)
 {
 	m_mesh = mesh;
 }

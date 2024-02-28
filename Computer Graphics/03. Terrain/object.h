@@ -16,7 +16,7 @@ public:
 	void Transform(XMFLOAT3 shift);
 	void Rotate(FLOAT pitch, FLOAT yaw, FLOAT roll);
 
-	void SetMesh(const shared_ptr<Mesh>& mesh);
+	void SetMesh(const shared_ptr<MeshBase>& mesh);
 	void SetTexture(const shared_ptr<Texture>& texture);
 
 	void SetPosition(XMFLOAT3 position);
@@ -29,7 +29,7 @@ protected:
 	XMFLOAT3			m_up;
 	XMFLOAT3			m_front;
 
-	shared_ptr<Mesh>	m_mesh;
+	shared_ptr<MeshBase>	m_mesh;
 	shared_ptr<Texture>	m_texture;
 };
 

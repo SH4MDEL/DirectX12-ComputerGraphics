@@ -1,22 +1,15 @@
 #pragma once
 #include "stdafx.h"
+#include "vertex.h"
 
-// Index Buffer 미사용
-class Mesh abstract
+class MeshBase abstract
 {
 public:
-	Mesh() = default;
-	virtual ~Mesh() = default;
+	MeshBase() = default;
+	virtual ~MeshBase() = default;
 
 	virtual void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
 	virtual void ReleaseUploadBuffer();
-
-	struct VertexBase {};
-
-protected:
-	template <typename T> requires derived_from<T, Mesh::VertexBase>
-	void LoadMesh(const ComPtr<ID3D12Device>& device,
-		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName);
 
 protected:
 	UINT						m_vertices;
@@ -25,96 +18,32 @@ protected:
 	D3D12_VERTEX_BUFFER_VIEW	m_vertexBufferView;
 };
 
-// Index Buffer 사용
-class IndexMesh abstract : public Mesh
+template <typename T> requires derived_from<T, VertexBase>
+class Mesh : public MeshBase
 {
 public:
-	IndexMesh() = default;
-	~IndexMesh() override = default;
-
-	virtual void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const override;
-	virtual void ReleaseUploadBuffer() override;
+	Mesh() = default;
+	Mesh(const ComPtr<ID3D12Device>& device, 
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName);
+	~Mesh() override = default;
 
 protected:
-	template <typename T> requires derived_from<T, Mesh::VertexBase>
-	void LoadIndexMesh(const ComPtr<ID3D12Device>& device,
+	virtual void LoadMesh(const ComPtr<ID3D12Device>& device,
 		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName);
 
-protected:
-	UINT						m_indices;
-	ComPtr<ID3D12Resource>		m_indexBuffer;
-	ComPtr<ID3D12Resource>		m_indexUploadBuffer;
-	D3D12_INDEX_BUFFER_VIEW		m_indexBufferView;
+	void CreateVertexBuffer(const ComPtr<ID3D12Device>& device,
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<T>& vertices);
 };
 
-class CubeMesh : public Mesh
+template<typename T> requires derived_from<T, VertexBase>
+inline Mesh<T>::Mesh(const ComPtr<ID3D12Device>& device,
+	const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName)
 {
-private:
-	struct Vertex : public VertexBase
-	{
-		XMFLOAT3 position;
-		XMFLOAT2 uv;
-	};
+	LoadMesh(device, commandList, fileName);
+}
 
-public:
-	CubeMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList,
-		const wstring& fileName);
-	~CubeMesh() override = default;
-};
-
-class CubeIndexMesh : public IndexMesh
-{
-private:
-	struct Vertex : public VertexBase
-	{
-		XMFLOAT3 position;
-		XMFLOAT4 color;
-	};
-
-public:
-	CubeIndexMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList,
-		const wstring& fileName);
-	~CubeIndexMesh() override = default;
-};
-
-class SkyboxMesh : public Mesh
-{
-private:
-	struct Vertex : public VertexBase
-	{
-		XMFLOAT3 position;
-	};
-
-public:
-	SkyboxMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList,
-		const wstring& fileName);
-	~SkyboxMesh() override = default;
-};
-
-class TerrainMesh : public Mesh
-{
-private:
-	struct Vertex : public VertexBase
-	{
-		Vertex(XMFLOAT3 p, XMFLOAT2 u0, XMFLOAT2 u1) : position{ p }, uv0{ u0 }, uv1{ u1 } {};
-		XMFLOAT3 position;
-		XMFLOAT2 uv0;
-		XMFLOAT2 uv1;
-	};
-
-public:
-	TerrainMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList,
-		const wstring& fileName);
-	~TerrainMesh() override = default;
-
-	FLOAT GetHeight(INT x, INT z) const;
-
-private:
-	vector<vector<BYTE>> m_height;
-};
-
-template <typename T> requires derived_from<T, Mesh::VertexBase>
-inline void Mesh::LoadMesh(const ComPtr<ID3D12Device>& device, 
+template<typename T> requires derived_from<T, VertexBase>
+inline void Mesh<T>::LoadMesh(const ComPtr<ID3D12Device>& device,
 	const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName)
 {
 	ifstream in(fileName, ios::binary);
@@ -126,6 +55,13 @@ inline void Mesh::LoadMesh(const ComPtr<ID3D12Device>& device,
 	vertices.resize(vertexNum);
 	in.read(reinterpret_cast<char*>(vertices.data()), vertexNum * sizeof(T));
 
+	CreateVertexBuffer(device, commandList, vertices);
+}
+
+template<typename T> requires derived_from<T, VertexBase>
+inline void Mesh<T>::CreateVertexBuffer(const ComPtr<ID3D12Device>& device, 
+	const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<T>& vertices)
+{
 	m_vertices = static_cast<UINT>(vertices.size());
 	const UINT vertexBufferSize = m_vertices * sizeof(T);
 
@@ -160,8 +96,57 @@ inline void Mesh::LoadMesh(const ComPtr<ID3D12Device>& device,
 	m_vertexBufferView.StrideInBytes = sizeof(T);
 }
 
-template<typename T> requires derived_from<T, Mesh::VertexBase>
-inline void IndexMesh::LoadIndexMesh(const ComPtr<ID3D12Device>& device, 
+template <typename T> requires derived_from<T, VertexBase>
+class IndexMesh : public Mesh<T>
+{
+public:
+	IndexMesh() = default;
+	IndexMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList,
+		const wstring& fileName);
+	~IndexMesh() override = default;
+
+	virtual void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const override;
+	virtual void ReleaseUploadBuffer() override;
+
+protected:
+	virtual void LoadMesh(const ComPtr<ID3D12Device>& device,
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName) override;
+
+	void CreateIndexBuffer(const ComPtr<ID3D12Device>& device,
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<T>& indices);
+
+protected:
+	UINT						m_indices;
+	ComPtr<ID3D12Resource>		m_indexBuffer;
+	ComPtr<ID3D12Resource>		m_indexUploadBuffer;
+	D3D12_INDEX_BUFFER_VIEW		m_indexBufferView;
+};
+
+template<typename T> requires derived_from<T, VertexBase>
+inline IndexMesh<T>::IndexMesh(const ComPtr<ID3D12Device>& device,
+	const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName)
+{
+	LoadMesh(device, commandList, fileName);
+}
+
+template<typename T> requires derived_from<T, VertexBase>
+inline void IndexMesh<T>::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
+{
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
+	commandList->IASetIndexBuffer(&m_indexBufferView);
+	commandList->DrawIndexedInstanced(m_indices, 1, 0, 0, 0);
+}
+
+template<typename T> requires derived_from<T, VertexBase>
+inline void IndexMesh<T>::ReleaseUploadBuffer()
+{
+	MeshBase::ReleaseUploadBuffer();
+	if (m_indexUploadBuffer) m_indexUploadBuffer.Reset();
+}
+
+template<typename T> requires derived_from<T, VertexBase>
+inline void IndexMesh<T>::LoadMesh(const ComPtr<ID3D12Device>& device, 
 	const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName)
 {
 	ifstream in(fileName, ios::binary);
@@ -180,39 +165,14 @@ inline void IndexMesh::LoadIndexMesh(const ComPtr<ID3D12Device>& device,
 	indices.resize(indiceNum);
 	in.read(reinterpret_cast<char*>(indices.data()), indiceNum * sizeof(UINT));
 
-	m_vertices = static_cast<UINT>(vertices.size());
-	const UINT vertexBufferSize = m_vertices * sizeof(T);
+	CreateVertexBuffer(device, commandList, vertices);
+	CreateIndexBuffer(device, commandList, indices);
+}
 
-	Utiles::ThrowIfFailed(device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
-		D3D12_RESOURCE_STATE_COPY_DEST,
-		nullptr,
-		IID_PPV_ARGS(&m_vertexBuffer)));
-
-	Utiles::ThrowIfFailed(device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(vertexBufferSize),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&m_vertexUploadBuffer)));
-
-	D3D12_SUBRESOURCE_DATA vertexData{};
-	vertexData.pData = vertices.data();
-	vertexData.RowPitch = vertexBufferSize;
-	vertexData.SlicePitch = vertexData.RowPitch;
-	UpdateSubresources<1>(commandList.Get(),
-		m_vertexBuffer.Get(), m_vertexUploadBuffer.Get(), 0, 0, 1, &vertexData);
-
-	commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_vertexBuffer.Get(),
-		D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
-
-	m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
-	m_vertexBufferView.SizeInBytes = vertexBufferSize;
-	m_vertexBufferView.StrideInBytes = sizeof(T);
-
+template<typename T> requires derived_from<T, VertexBase>
+inline void IndexMesh<T>::CreateIndexBuffer(const ComPtr<ID3D12Device>& device, 
+	const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<T>& indices)
+{
 	m_indices = static_cast<UINT>(indices.size());
 	const UINT indexBufferSize = m_indices * sizeof(UINT);
 
@@ -245,3 +205,20 @@ inline void IndexMesh::LoadIndexMesh(const ComPtr<ID3D12Device>& device,
 	m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 	m_indexBufferView.SizeInBytes = indexBufferSize;
 }
+
+class TerrainMesh : public Mesh<DetailVertex>
+{
+public:
+	TerrainMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList,
+		const wstring& fileName);
+	~TerrainMesh() override = default;
+
+	FLOAT GetHeight(INT x, INT z) const;
+
+private:
+	void LoadMesh(const ComPtr<ID3D12Device>& device,
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName) override;
+
+private:
+	vector<vector<BYTE>> m_height;
+};
