@@ -14,7 +14,7 @@ void Scene::MouseEvent(HWND hWnd, FLOAT timeElapsed)
 
 	POINT lastMousePosition{ 
 		windowRect.left + static_cast<LONG>(g_framework->GetWindowWidth() / 2), 
-		windowRect.top + static_cast<LONG>(g_framework->GetWindowWidth() / 2) };
+		windowRect.top + static_cast<LONG>(g_framework->GetWindowHeight() / 2) };
 	POINT mousePosition;
 	GetCursorPos(&mousePosition);
 

@@ -112,9 +112,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    RECT rect{ 0, 0, Settings::DefaultWindowWidth, Settings::DefaultWindowHeight };
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, 
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle,
        WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_BORDER,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+       rect.left, rect.top, rect.right, rect.bottom, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd) return false;
 
