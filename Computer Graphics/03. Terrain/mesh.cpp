@@ -18,11 +18,6 @@ TerrainMesh::TerrainMesh(const ComPtr<ID3D12Device>& device,
 	LoadMesh(device, commandList, fileName);
 }
 
-FLOAT TerrainMesh::GetHeight(INT x, INT z) const
-{
-	return static_cast<FLOAT>(m_height[x][z]);
-}
-
 void TerrainMesh::LoadMesh(const ComPtr<ID3D12Device>& device, 
 	const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName)
 {

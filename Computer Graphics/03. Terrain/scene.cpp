@@ -87,9 +87,9 @@ inline void Scene::BuildShaders(const ComPtr<ID3D12Device>& device,
 inline void Scene::BuildMeshes(const ComPtr<ID3D12Device>& device,
 	const ComPtr<ID3D12GraphicsCommandList>& commandList)
 {
-	auto cube = make_shared<Mesh<TextureVertex>>(device, commandList,
+	auto cubeMesh = make_shared<Mesh<TextureVertex>>(device, commandList,
 		TEXT("../Resources/Meshes/CubeMesh.binary"));
-	m_meshes.insert({ "CUBE", cube });
+	m_meshes.insert({ "CUBE", cubeMesh });
 	auto skyboxMesh = make_shared<Mesh<Vertex>>(device, commandList,
 		TEXT("../Resources/Meshes/SkyboxMesh.binary"));
 	m_meshes.insert({ "SKYBOX", skyboxMesh });
@@ -113,9 +113,10 @@ inline void Scene::BuildTextures(const ComPtr<ID3D12Device>& device,
 
 	auto terrainTexture = make_shared<Texture>(device);
 	terrainTexture->LoadTexture(device, commandList,
-		TEXT("../Resources/Textures/TerrainBase.dds"), RootParameter::Texture0);
-	terrainTexture->LoadTexture(device, commandList,
 		TEXT("../Resources/Textures/TerrainDetail.dds"), RootParameter::Texture1);
+	terrainTexture->LoadTexture(device, commandList,
+		TEXT("../Resources/Textures/TerrainBase.dds"), RootParameter::Texture0);
+
 	terrainTexture->CreateShaderVariable(device);
 	m_textures.insert({ "TERRAIN", terrainTexture });
 }

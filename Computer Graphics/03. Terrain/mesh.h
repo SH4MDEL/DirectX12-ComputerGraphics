@@ -113,7 +113,7 @@ protected:
 		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName) override;
 
 	void CreateIndexBuffer(const ComPtr<ID3D12Device>& device,
-		const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<T>& indices);
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<UINT>& indices);
 
 protected:
 	UINT						m_indices;
@@ -171,7 +171,7 @@ inline void IndexMesh<T>::LoadMesh(const ComPtr<ID3D12Device>& device,
 
 template<typename T> requires derived_from<T, VertexBase>
 inline void IndexMesh<T>::CreateIndexBuffer(const ComPtr<ID3D12Device>& device, 
-	const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<T>& indices)
+	const ComPtr<ID3D12GraphicsCommandList>& commandList, const vector<UINT>& indices)
 {
 	m_indices = static_cast<UINT>(indices.size());
 	const UINT indexBufferSize = m_indices * sizeof(UINT);
@@ -212,8 +212,6 @@ public:
 	TerrainMesh(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12GraphicsCommandList>& commandList,
 		const wstring& fileName);
 	~TerrainMesh() override = default;
-
-	FLOAT GetHeight(INT x, INT z) const;
 
 private:
 	void LoadMesh(const ComPtr<ID3D12Device>& device,

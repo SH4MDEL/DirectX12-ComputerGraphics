@@ -24,6 +24,7 @@ void Texture::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& comm
 	CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHandle{ m_srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart() };
 	for (const auto& [texture, rootParameterIndex] : m_textures) {
 		commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, descriptorHandle);
+		descriptorHandle.ptr += m_srvDescriptorSize;
 	}
 }
 
