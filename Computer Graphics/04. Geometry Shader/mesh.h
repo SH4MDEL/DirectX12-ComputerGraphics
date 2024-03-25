@@ -229,7 +229,7 @@ private:
 		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName) override;
 
 private:
-	vector<vector<BYTE>> m_height;
+	vector<vector<FLOAT>> m_height;
 	INT m_length;
 	FLOAT m_grid;
 };

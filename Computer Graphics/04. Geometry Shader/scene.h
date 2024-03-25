@@ -34,7 +34,7 @@ private:
 		const ComPtr<ID3D12GraphicsCommandList>& commandList);
 	inline void BuildTextures(const ComPtr<ID3D12Device>& device,
 		const ComPtr<ID3D12GraphicsCommandList>& commandList);
-	inline void BuildObjects();
+	inline void BuildObjects(const ComPtr<ID3D12Device>& device);
 
 
 private:

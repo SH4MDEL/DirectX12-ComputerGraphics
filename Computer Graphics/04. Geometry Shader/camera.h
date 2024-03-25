@@ -1,10 +1,18 @@
 #pragma once
 #include "stdafx.h"
+#include "buffer.h"
+
+struct CameraData : public BufferBase
+{
+	XMFLOAT4X4 viewMatrix;
+	XMFLOAT4X4 projectionMatrix;
+	XMFLOAT3 eye;
+};
 
 class Camera
 {
 public:
-	Camera();
+	Camera(const ComPtr<ID3D12Device>& device);
 	~Camera() = default;
 
 	virtual void Update(FLOAT timeElapsed) = 0;
@@ -35,12 +43,14 @@ protected:
 	XMFLOAT3 m_u;
 	XMFLOAT3 m_v;
 	XMFLOAT3 m_n;
+
+	unique_ptr<UploadBuffer<CameraData>> m_bufferPointer;
 };
 
 class ThirdPersonCamera : public Camera
 {
 public:
-	ThirdPersonCamera();
+	ThirdPersonCamera(const ComPtr<ID3D12Device>& device);
 	~ThirdPersonCamera() = default;
 
 	void Update(FLOAT timeElapsed) override;

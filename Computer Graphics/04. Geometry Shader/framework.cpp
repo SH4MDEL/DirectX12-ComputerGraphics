@@ -248,8 +248,8 @@ void GameFramework::CreateRootSignature()
 		D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2, 0, D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND);
 
 	CD3DX12_ROOT_PARAMETER rootParameter[5];
-	rootParameter[RootParameter::GameObject].InitAsConstants(16, 0, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootParameter[RootParameter::Camera].InitAsConstants(35, 1, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootParameter[RootParameter::GameObject].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootParameter[RootParameter::Camera].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootParameter[RootParameter::Texture0].InitAsDescriptorTable(1,
 		&descriptorRange[DescriptorRange::Texture0], D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameter[RootParameter::Texture1].InitAsDescriptorTable(1,

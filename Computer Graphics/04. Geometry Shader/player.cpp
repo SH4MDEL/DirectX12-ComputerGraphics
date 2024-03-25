@@ -1,6 +1,7 @@
 #include "player.h"
 
-Player::Player() : GameObject(), m_speed{Settings::PlayerSpeed}
+Player::Player(const ComPtr<ID3D12Device>& device) : 
+	GameObject(device), m_speed{Settings::PlayerSpeed}
 {
 }
 

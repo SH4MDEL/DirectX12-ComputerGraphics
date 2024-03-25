@@ -1,8 +1,10 @@
 #include "object.h"
 
-GameObject::GameObject() : m_right{1.f, 0.f, 0.f}, m_up{0.f, 1.f, 0.f}, m_front{0.f, 0.f, 1.f}
+GameObject::GameObject(const ComPtr<ID3D12Device>& device) : 
+	m_right{1.f, 0.f, 0.f}, m_up{0.f, 1.f, 0.f}, m_front{0.f, 0.f, 1.f}
 {
 	XMStoreFloat4x4(&m_worldMatrix, XMMatrixIdentity());
+	m_bufferPointer = make_unique<UploadBuffer<ObjectData>>(device, true);
 }
 
 void GameObject::Update(FLOAT timeElapsed)
@@ -18,9 +20,14 @@ void GameObject::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) co
 
 void GameObject::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
 {
-	XMFLOAT4X4 worldMatrix;
-	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_worldMatrix)));
-	commandList->SetGraphicsRoot32BitConstants(RootParameter::GameObject, 16, &worldMatrix, 0);
+	ObjectData buffer;
+	XMStoreFloat4x4(&buffer.worldMatrix,
+		XMMatrixTranspose(XMLoadFloat4x4(&m_worldMatrix)));
+
+	m_bufferPointer->Copy(buffer);
+	D3D12_GPU_VIRTUAL_ADDRESS virtualAddress =
+		m_bufferPointer->Resource()->GetGPUVirtualAddress();
+	commandList->SetGraphicsRootConstantBufferView((INT)RootParameter::GameObject, virtualAddress);
 
 	if (m_texture) m_texture->UpdateShaderVariable(commandList);
 }
@@ -62,7 +69,8 @@ XMFLOAT3 GameObject::GetPosition() const
 	return XMFLOAT3{m_worldMatrix._41, m_worldMatrix._42, m_worldMatrix._43};
 }
 
-RotatingObject::RotatingObject() : GameObject(), m_rotatingSpeed{ Utiles::Random::GetFloat(10.f, 50.f) }
+RotatingObject::RotatingObject(const ComPtr<ID3D12Device>& device) : 
+	GameObject(device), m_rotatingSpeed{ Utiles::Random::GetFloat(10.f, 50.f) }
 {
 }
 
@@ -71,7 +79,8 @@ void RotatingObject::Update(FLOAT timeElapsed)
 	Rotate(0.f, m_rotatingSpeed * timeElapsed, 0.f);
 }
 
-Terrain::Terrain() : GameObject()
+Terrain::Terrain(const ComPtr<ID3D12Device>& device) : 
+	GameObject(device)
 {
 }
 

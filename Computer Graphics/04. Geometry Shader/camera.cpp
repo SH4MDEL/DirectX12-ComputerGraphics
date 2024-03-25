@@ -1,25 +1,29 @@
 #include "camera.h"
 
-Camera::Camera() : m_eye{0.f, 0.f, 0.f}, m_at{0.f, 0.f, 1.f}, m_up{0.f, 1.f, 0.f},
+Camera::Camera(const ComPtr<ID3D12Device>& device) : m_eye{ 0.f, 0.f, 0.f }, m_at{0.f, 0.f, 1.f}, m_up{0.f, 1.f, 0.f},
 	m_u{1.f, 0.f, 0.f}, m_v{0.f, 1.f, 0.f}, m_n{0.f, 0.f, 1.f}
 {
 	XMStoreFloat4x4(&m_viewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_projectionMatrix, XMMatrixIdentity());
+	m_bufferPointer = make_unique<UploadBuffer<CameraData>>(device, true);
 }
 
 void Camera::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList)
 {
-	XMStoreFloat4x4(&m_viewMatrix, XMMatrixLookAtLH(XMLoadFloat3(&m_eye), XMLoadFloat3(&m_at), XMLoadFloat3(&m_up)));
+	XMStoreFloat4x4(&m_viewMatrix, 
+		XMMatrixLookAtLH(XMLoadFloat3(&m_eye), XMLoadFloat3(&m_at), XMLoadFloat3(&m_up)));
 
-	XMFLOAT4X4 viewMatrix;
-	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_viewMatrix)));
-	commandList->SetGraphicsRoot32BitConstants(RootParameter::Camera, 16, &viewMatrix, 0);
+	CameraData buffer;
+	XMStoreFloat4x4(&buffer.viewMatrix, 
+		XMMatrixTranspose(XMLoadFloat4x4(&m_viewMatrix)));
+	XMStoreFloat4x4(&buffer.projectionMatrix, 
+		XMMatrixTranspose(XMLoadFloat4x4(&m_projectionMatrix)));
+	buffer.eye = m_eye;
 
-	XMFLOAT4X4 projectionMatrix;
-	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_projectionMatrix)));
-	commandList->SetGraphicsRoot32BitConstants(RootParameter::Camera, 16, &projectionMatrix, 16);
-
-	commandList->SetGraphicsRoot32BitConstants(RootParameter::Camera, 3, &m_eye, 32);
+	m_bufferPointer->Copy(buffer);
+	D3D12_GPU_VIRTUAL_ADDRESS virtualAddress = 
+		m_bufferPointer->Resource()->GetGPUVirtualAddress();
+	commandList->SetGraphicsRootConstantBufferView((INT)RootParameter::Camera, virtualAddress);
 }
 
 void Camera::SetLens(FLOAT fovy, FLOAT aspect, FLOAT minZ, FLOAT maxZ)
@@ -54,7 +58,8 @@ void Camera::UpdateBasis()
 	m_v = Utiles::Vector3::Normalize(Utiles::Vector3::Cross(m_n, m_u));
 }
 
-ThirdPersonCamera::ThirdPersonCamera() : Camera{}, m_radius{Settings::DefaultCameraRadius},
+ThirdPersonCamera::ThirdPersonCamera(const ComPtr<ID3D12Device>& device) : Camera(device), 
+	m_radius{Settings::DefaultCameraRadius},
 	m_phi{Settings::DefaultCameraPitch}, m_theta{Settings::DefaultCameraYaw}
 {
 

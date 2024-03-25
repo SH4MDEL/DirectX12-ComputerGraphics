@@ -5,7 +5,7 @@
 class Player : public GameObject
 {
 public:
-	Player();
+	Player(const ComPtr<ID3D12Device>& device);
 	~Player() override = default;
 
 	void MouseEvent(FLOAT timeElapsed);
