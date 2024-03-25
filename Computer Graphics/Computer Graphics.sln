@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03. Terrain", "03. Terrain\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exporter", "Exporter\Exporter.vcxproj", "{51397D4F-019A-4393-BD2C-2E18A3D09362}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04. Geometry Shader", "04. Geometry Shader\04. Geometry Shader.vcxproj", "{44CCFF17-3CBA-4D52-9725-3F94298D3195}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{51397D4F-019A-4393-BD2C-2E18A3D09362}.Release|x64.Build.0 = Release|x64
 		{51397D4F-019A-4393-BD2C-2E18A3D09362}.Release|x86.ActiveCfg = Release|Win32
 		{51397D4F-019A-4393-BD2C-2E18A3D09362}.Release|x86.Build.0 = Release|Win32
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Debug|x64.ActiveCfg = Debug|x64
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Debug|x64.Build.0 = Debug|x64
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Debug|x86.ActiveCfg = Debug|Win32
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Debug|x86.Build.0 = Debug|Win32
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Release|x64.ActiveCfg = Release|x64
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Release|x64.Build.0 = Release|x64
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Release|x86.ActiveCfg = Release|Win32
+		{44CCFF17-3CBA-4D52-9725-3F94298D3195}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

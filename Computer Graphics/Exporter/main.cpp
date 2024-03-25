@@ -214,9 +214,26 @@ void CreateCubeIndexMesh()
 	out.write(reinterpret_cast<const char*>(indices.data()), sizeof(unsigned) * indices.size());
 }
 
+void CreateBillboardMesh()
+{
+	struct Vertex
+	{
+		XMFLOAT3 position;
+		XMFLOAT2 size;
+	};
+
+	vector<Vertex> vertices(1, {XMFLOAT3{0.f, 0.f, 0.f}, XMFLOAT2{1.f, 1.f}});
+
+	ofstream out("../Resources/Meshes/BillboardMesh.binary", ios::binary);
+	out << vertices.size();
+	out.write(reinterpret_cast<const char*>(vertices.data()), sizeof(Vertex) * vertices.size());
+}
+
+
 int main()
 {
-	CreateCubeMesh();
-	CreateCubeIndexMesh();
-	CreateSkyboxMesh();
+	//CreateCubeMesh();
+	//CreateCubeIndexMesh();
+	//CreateSkyboxMesh();
+	CreateBillboardMesh();
 }
