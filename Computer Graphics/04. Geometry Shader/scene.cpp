@@ -58,9 +58,9 @@ void Scene::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
 	m_terrain->Render(commandList);
 
 	m_shaders.at("BILLBOARD")->UpdateShaderVariable(commandList);
-	//for (auto& grass : m_grasses) {
-	//	grass->Render(commandList);
-	//}
+	for (auto& grass : m_grasses) {
+		grass->Render(commandList);
+	}
 
 	m_shaders.at("SKYBOX")->UpdateShaderVariable(commandList);
 	m_skybox->Render(commandList);
@@ -112,10 +112,10 @@ inline void Scene::BuildTextures(const ComPtr<ID3D12Device>& device,
 	const ComPtr<ID3D12GraphicsCommandList>& commandList)
 {
 	auto checkboardTexture = make_shared<Texture>(device, commandList,
-		TEXT("../Resources/Textures/Checkboard.dds"), RootParameter::Texture0);
+		TEXT("../Resources/Textures/Checkboard.dds"), RootParameter::Texture);
 	m_textures.insert({ "CHECKBOARD", checkboardTexture });
 	auto brickTextire = make_shared<Texture>(device, commandList,
-		TEXT("../Resources/Textures/Brick.dds"), RootParameter::Texture0);
+		TEXT("../Resources/Textures/Brick.dds"), RootParameter::Texture);
 	m_textures.insert({ "BRICK", brickTextire });
 	auto skyboxTexture = make_shared<Texture>(device, commandList,
 		TEXT("../Resources/Textures/Skybox.dds"), RootParameter::TextureCube);
@@ -123,23 +123,23 @@ inline void Scene::BuildTextures(const ComPtr<ID3D12Device>& device,
 
 	auto terrainTexture = make_shared<Texture>(device);
 	terrainTexture->LoadTexture(device, commandList,
-		TEXT("../Resources/Textures/TerrainBase.dds"), RootParameter::Texture0);
+		TEXT("../Resources/Textures/TerrainBase.dds"), RootParameter::Texture);
 	terrainTexture->LoadTexture(device, commandList,
-		TEXT("../Resources/Textures/TerrainDetail.dds"), RootParameter::Texture1);
+		TEXT("../Resources/Textures/TerrainDetail.dds"), RootParameter::Texture);
 	terrainTexture->CreateShaderVariable(device);
 	m_textures.insert({ "TERRAIN", terrainTexture });
 
 	auto grass0Texture = make_shared<Texture>(device, commandList,
-		TEXT("../Resources/Textures/Grass01.dds"), RootParameter::Texture0);
+		TEXT("../Resources/Textures/Grass01.dds"), RootParameter::Texture);
 	m_textures.insert({ "GRASS0", grass0Texture });
 	auto grass1Texture = make_shared<Texture>(device, commandList,
-		TEXT("../Resources/Textures/Grass02.dds"), RootParameter::Texture0);
+		TEXT("../Resources/Textures/Grass02.dds"), RootParameter::Texture);
 	m_textures.insert({ "GRASS1", grass1Texture });
 	auto grass2Texture = make_shared<Texture>(device, commandList,
-		TEXT("../Resources/Textures/Grass03.dds"), RootParameter::Texture0);
+		TEXT("../Resources/Textures/Grass03.dds"), RootParameter::Texture);
 	m_textures.insert({ "GRASS2", grass2Texture });
 	auto grass3Texture = make_shared<Texture>(device, commandList,
-		TEXT("../Resources/Textures/Grass04.dds"), RootParameter::Texture0);
+		TEXT("../Resources/Textures/Grass04.dds"), RootParameter::Texture);
 	m_textures.insert({ "GRASS3", grass3Texture });
 }
 
@@ -184,8 +184,8 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 			FLOAT fz = static_cast<FLOAT>(z);
 			auto grass = make_shared<GameObject>(device);
 			grass->SetMesh(m_meshes["BILLBOARD"]);
-			string s = "GRASS" + to_string(abs(x * z) % 4);
-			grass->SetTexture(m_textures[s]);
+			string name = "GRASS" + to_string(abs(x * z) % 4);
+			grass->SetTexture(m_textures[name]);
 			grass->SetPosition(XMFLOAT3{ fx, m_terrain->GetHeight(fx, fz), fz });
 			m_grasses.push_back(grass);
 		}

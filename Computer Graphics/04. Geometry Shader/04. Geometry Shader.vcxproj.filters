@@ -131,9 +131,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>미리 컴파일된 헤더</Filter>
     </ClCompile>
-    <ClCompile Include="buffer.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="04. Geometry Shader.rc">

@@ -10,8 +10,7 @@ cbuffer Camera : register(b1)
     float3 g_cameraPosition : packoffset(c8);
 };
 
-Texture2D g_texture0 : register(t0);
-Texture2D g_texture1 : register(t1);
+Texture2D g_texture[2] : register(t0);
 TextureCube g_textureCube : register(t2);
 
 SamplerState g_sampler : register(s0);
@@ -41,7 +40,7 @@ OBJECT_PIXEL_INPUT OBJECT_VERTEX(OBJECT_VERTEX_INPUT input)
 
 float4 OBJECT_PIXEL(OBJECT_PIXEL_INPUT input) : SV_TARGET
 {
-    return g_texture0.Sample(g_sampler, input.uv);
+    return g_texture[0].Sample(g_sampler, input.uv);
 }
 
 
@@ -101,7 +100,7 @@ DETAIL_PIXEL_INPUT DETAIL_VERTEX(DETAIL_VERTEX_INPUT input)
 
 float4 DETAIL_PIXEL(DETAIL_PIXEL_INPUT input) : SV_TARGET
 {
-    return lerp(g_texture0.Sample(g_sampler, input.uv0), g_texture1.Sample(g_sampler, input.uv1), 0.5f);
+    return lerp(g_texture[0].Sample(g_sampler, input.uv0), g_texture[1].Sample(g_sampler, input.uv1), 0.5f);
 }
 
 
@@ -163,5 +162,5 @@ void BILLBOARD_GEOMETRY(point BILLBOARD_GEOMETRY_INPUT input[1],
 
 float4 BILLBOARD_PIXEL(BILLBOARD_PIXEL_INPUT input) : SV_TARGET
 {
-    return g_texture0.Sample(g_sampler, input.uv);
+    return g_texture[0].Sample(g_sampler, input.uv);
 }

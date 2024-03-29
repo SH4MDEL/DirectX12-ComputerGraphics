@@ -21,11 +21,15 @@ void Texture::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& comm
 	ID3D12DescriptorHeap* ppHeaps[] = { m_srvDescriptorHeap.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
-	CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHandle{ m_srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart() };
-	for (const auto& [texture, rootParameterIndex] : m_textures) {
-		commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, descriptorHandle);
-		descriptorHandle.ptr += m_srvDescriptorSize;
-	}
+	commandList->SetGraphicsRootDescriptorTable(m_textures[0].second,
+		m_srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
+
+	//CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHandle{ m_srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart() };
+	//for (const auto& [texture, rootParameterIndex] : m_textures) {
+	//	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, 
+	//		m_srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
+	//	descriptorHandle.ptr += m_srvDescriptorSize;
+	//}
 }
 
 void Texture::ReleaseUploadBuffer()
@@ -98,8 +102,7 @@ void Texture::CreateShaderResourceView(const ComPtr<ID3D12Device>& device)
 
 		switch (rootParameterIndex)
 		{
-		case RootParameter::Texture0:
-		case RootParameter::Texture1:
+		case RootParameter::Texture:
 			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 			srvDesc.Texture2D.MostDetailedMip = 0;
 			srvDesc.Texture2D.MipLevels = texture->GetDesc().MipLevels;
