@@ -5,7 +5,7 @@ Camera::Camera(const ComPtr<ID3D12Device>& device) : m_eye{ 0.f, 0.f, 0.f }, m_a
 {
 	XMStoreFloat4x4(&m_viewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_projectionMatrix, XMMatrixIdentity());
-	m_bufferPointer = make_unique<UploadBuffer<CameraData>>(device, true);
+	m_constantBuffer = make_unique<UploadBuffer<CameraData>>(device, (UINT)RootParameter::Camera, true);
 }
 
 void Camera::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList)
@@ -20,10 +20,7 @@ void Camera::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& comma
 		XMMatrixTranspose(XMLoadFloat4x4(&m_projectionMatrix)));
 	buffer.eye = m_eye;
 
-	m_bufferPointer->Copy(buffer);
-	D3D12_GPU_VIRTUAL_ADDRESS virtualAddress = 
-		m_bufferPointer->Resource()->GetGPUVirtualAddress();
-	commandList->SetGraphicsRootConstantBufferView((INT)RootParameter::Camera, virtualAddress);
+	m_constantBuffer->UpdateShaderVariable(commandList, buffer);
 }
 
 void Camera::SetLens(FLOAT fovy, FLOAT aspect, FLOAT minZ, FLOAT maxZ)

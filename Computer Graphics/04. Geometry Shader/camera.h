@@ -44,7 +44,7 @@ protected:
 	XMFLOAT3 m_v;
 	XMFLOAT3 m_n;
 
-	unique_ptr<UploadBuffer<CameraData>> m_bufferPointer;
+	unique_ptr<UploadBuffer<CameraData>> m_constantBuffer;
 };
 
 class ThirdPersonCamera : public Camera

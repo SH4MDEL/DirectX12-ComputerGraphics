@@ -4,7 +4,7 @@ GameObject::GameObject(const ComPtr<ID3D12Device>& device) :
 	m_right{1.f, 0.f, 0.f}, m_up{0.f, 1.f, 0.f}, m_front{0.f, 0.f, 1.f}
 {
 	XMStoreFloat4x4(&m_worldMatrix, XMMatrixIdentity());
-	m_bufferPointer = make_unique<UploadBuffer<ObjectData>>(device, true);
+	m_constantBuffer = make_unique<UploadBuffer<ObjectData>>(device, (UINT)RootParameter::GameObject, true);
 }
 
 void GameObject::Update(FLOAT timeElapsed)
@@ -24,11 +24,7 @@ void GameObject::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& c
 	XMStoreFloat4x4(&buffer.worldMatrix,
 		XMMatrixTranspose(XMLoadFloat4x4(&m_worldMatrix)));
 
-	m_bufferPointer->Copy(buffer);
-	D3D12_GPU_VIRTUAL_ADDRESS virtualAddress =
-		m_bufferPointer->Resource()->GetGPUVirtualAddress();
-	commandList->SetGraphicsRootConstantBufferView((INT)RootParameter::GameObject, virtualAddress);
-
+	m_constantBuffer->UpdateShaderVariable(commandList, buffer);
 	if (m_texture) m_texture->UpdateShaderVariable(commandList);
 }
 
