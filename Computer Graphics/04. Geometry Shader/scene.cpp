@@ -38,6 +38,7 @@ void Scene::KeyboardEvent(FLOAT timeElapsed)
 void Scene::Update(FLOAT timeElapsed)
 {
 	m_player->Update(timeElapsed);
+
 	for (auto& object : m_objects) {
 		object->Update(timeElapsed);
 	}

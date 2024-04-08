@@ -31,10 +31,10 @@ FLOAT TerrainMesh::GetHeight(FLOAT x, FLOAT z) const
 
 	const XMFLOAT2 percentage = XMFLOAT2{ x - floor(x), z - floor(z) };
 	if (percentage.x >= percentage.y) {
-		return lerp(lerp(m_height[nz][nx], m_height[nz + 1][nx], percentage.x),
+		return lerp(lerp(m_height[nz][nx], m_height[nz][nx + 1], percentage.x),
 			m_height[nz + 1][nx + 1], percentage.y);
 	}
-	return lerp(lerp(m_height[nz][nx], m_height[nz][nx + 1], percentage.y),
+	return lerp(lerp(m_height[nz][nx], m_height[nz + 1][nx], percentage.y),
 		m_height[nz + 1][nx + 1], percentage.x);
 }
 
