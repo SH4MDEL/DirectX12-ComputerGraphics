@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="셰이더 파일">
+      <UniqueIdentifier>{6027ca67-24c1-4643-89f2-3f014adc9e69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="외부 파일">
+      <UniqueIdentifier>{d99c131d-f7b2-4c4e-bc41-430b62282fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="미리 컴파일된 헤더">
+      <UniqueIdentifier>{99125e10-0125-4b6e-a34f-cbb03d50ee6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Framework">
+      <UniqueIdentifier>{5f1d13cc-2b71-464b-80ba-fd4402043bd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{921c84c4-15c1-4efa-b501-efda061581bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Mesh">
+      <UniqueIdentifier>{5ef0f06d-58a9-4be8-9479-be9870366a29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\System">
+      <UniqueIdentifier>{f109561c-1ed2-4db3-917a-8e9f8ba49f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{aba0435a-c59e-4deb-bd5d-97019f945b91}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="settings.h">
+      <Filter>미리 컴파일된 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>미리 컴파일된 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="utiles.h">
+      <Filter>미리 컴파일된 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="DDSTextureLoader12.h">
+      <Filter>외부 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>외부 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="05. Instancing.h">
+      <Filter>소스 파일\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>소스 파일\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>소스 파일\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>소스 파일\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="vertex.h">
+      <Filter>소스 파일\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
+      <Filter>소스 파일\Mesh</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>미리 컴파일된 헤더</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader12.cpp">
+      <Filter>외부 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="05. Instancing.cpp">
+      <Filter>소스 파일\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework.cpp">
+      <Filter>소스 파일\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>소스 파일\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="object.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>소스 파일\Mesh</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="05. Instancing.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="05. Instancing.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader.hlsl">
+      <Filter>셰이더 파일</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

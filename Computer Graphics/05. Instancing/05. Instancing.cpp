@@ -1,11 +1,10 @@
 ﻿#include "framework.h"
-#include "04. Geometry Shader.h"
+#include "05. Instancing.h"
 
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
-WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
 #ifdef UNICODE
@@ -29,10 +28,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: 여기에 코드를 입력합니다.
-
+    
     // 전역 문자열을 초기화합니다.
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_MY04GEOMETRYSHADER, szWindowClass, MAX_LOADSTRING);
+    g_title = Settings::TitleName;
+    LoadStringW(hInstance, IDC_MY05INSTANCING, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // 애플리케이션 초기화를 수행합니다:
@@ -41,7 +40,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return false;
     }
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY04GEOMETRYSHADER));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY05INSTANCING));
 
     MSG msg;
 
@@ -82,7 +81,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MY04GEOMETRYSHADER));
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MY05INSTANCING));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = nullptr;
@@ -108,7 +107,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     RECT rect{ 0, 0, Settings::DefaultWindowWidth, Settings::DefaultWindowHeight };
 
-    HWND hWnd = CreateWindowW(szWindowClass, szTitle,
+    HWND hWnd = CreateWindowW(szWindowClass, g_title.c_str(),
         WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_BORDER,
         rect.left, rect.top, rect.right, rect.bottom, nullptr, nullptr, hInstance, nullptr);
 
