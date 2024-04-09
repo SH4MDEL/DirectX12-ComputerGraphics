@@ -54,7 +54,7 @@ template<typename T> requires derived_from<T, BufferBase>
 inline void UploadBuffer<T>::UpdateRootConstantBuffer(
     const ComPtr<ID3D12GraphicsCommandList>& commandList, const T& data) const
 {
-    Copy(data, 0);
+    Copy(data);
 
     if (m_isConstantBuffer) {
         commandList->SetGraphicsRootConstantBufferView(
@@ -75,5 +75,5 @@ inline void UploadBuffer<T>::UpdateRootShaderResource(
 template<typename T> requires derived_from<T, BufferBase>
 inline void UploadBuffer<T>::Copy(const T& data, UINT index) const
 {
-    memcpy(&m_data[m_byteSize * index], &data, sizeof(T));
+    memcpy(&m_data[index], &data, sizeof(T));
 }

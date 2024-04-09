@@ -133,9 +133,6 @@
     <ClCompile Include="timer.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="Instance.cpp">
-      <Filter>소스 파일\Mesh</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="05. Instancing.rc">

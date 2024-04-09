@@ -178,19 +178,19 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 	m_terrain->SetTexture(m_textures["TERRAIN"]);
 	m_terrain->SetPosition(XMFLOAT3{ 0.f, -100.f, 0.f });
 
-	m_instanceBillboard = make_unique<Instance<Mesh<TextureVertex>>>(device,
-		static_pointer_cast<Mesh<TextureVertex>>(m_meshes["BILLBOARD"]), 50);
-	//vector<shared_ptr<GameObject>> grasses;
-	for (int x = -3; x <= 3; x += 1) {
-		for (int z = -3; z <= 3; z += 1) {
+	vector<shared_ptr<GameObject>> grasses;
+	for (int x = -100; x <= 100; x += 1) {
+		for (int z = -100; z <= 100; z += 1) {
 			FLOAT fx = static_cast<FLOAT>(x);
 			FLOAT fz = static_cast<FLOAT>(z);
 			auto grass = make_shared<GameObject>(device);
 			grass->SetPosition(XMFLOAT3{ fx, m_terrain->GetHeight(fx, fz), fz });
-			//grasses.push_back(grass);
-			m_instanceBillboard->SetObject(grass);
+			grasses.push_back(grass);
 		}
 	}
+	m_instanceBillboard = make_unique<Instance<Mesh<TextureVertex>>>(device,
+		static_pointer_cast<Mesh<TextureVertex>>(m_meshes["BILLBOARD"]), static_cast<UINT>(grasses.size()));
+	m_instanceBillboard->SetObjects(move(grasses));
 }
 
 

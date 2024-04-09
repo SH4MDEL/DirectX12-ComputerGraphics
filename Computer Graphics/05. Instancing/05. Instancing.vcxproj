@@ -154,7 +154,6 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="framework.cpp" />
-    <ClCompile Include="Instance.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="player.cpp" />
