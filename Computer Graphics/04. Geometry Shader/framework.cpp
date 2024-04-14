@@ -240,18 +240,18 @@ void GameFramework::CreateDepthStencilView()
 void GameFramework::CreateRootSignature()
 {
 	CD3DX12_DESCRIPTOR_RANGE descriptorRange[2];
-	descriptorRange[DescriptorRange::Texture].Init(
-		D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 0, 0);
 	descriptorRange[DescriptorRange::TextureCube].Init(
-		D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2, 0);
+		D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0);
+	descriptorRange[DescriptorRange::Texture].Init(
+		D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 2, 1, 0);
 
 	CD3DX12_ROOT_PARAMETER rootParameter[4];
 	rootParameter[RootParameter::GameObject].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootParameter[RootParameter::Camera].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootParameter[RootParameter::Texture].InitAsDescriptorTable(1,
-		&descriptorRange[DescriptorRange::Texture], D3D12_SHADER_VISIBILITY_PIXEL);
 	rootParameter[RootParameter::TextureCube].InitAsDescriptorTable(1,
 		&descriptorRange[DescriptorRange::TextureCube], D3D12_SHADER_VISIBILITY_PIXEL);
+	rootParameter[RootParameter::Texture].InitAsDescriptorTable(1,
+		&descriptorRange[DescriptorRange::Texture], D3D12_SHADER_VISIBILITY_PIXEL);
 
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc;
 	samplerDesc.Init(								

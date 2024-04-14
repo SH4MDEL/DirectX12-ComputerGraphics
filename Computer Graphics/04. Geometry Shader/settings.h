@@ -18,12 +18,12 @@ namespace RootParameter
 {
     constexpr UINT GameObject = 0;
     constexpr UINT Camera = 1;
-    constexpr UINT Texture = 2;
-    constexpr UINT TextureCube = 3;
+    constexpr UINT TextureCube = 2;
+    constexpr UINT Texture = 3;
 }
 
 namespace DescriptorRange
 {
-    constexpr UINT Texture = 0;
-    constexpr UINT TextureCube = 1;
+    constexpr UINT TextureCube = 0;
+    constexpr UINT Texture = 1;
 }

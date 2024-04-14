@@ -10,12 +10,13 @@ cbuffer Camera : register(b1)
     float3 g_cameraPosition : packoffset(c8);
 };
 
-Texture2D g_texture[2] : register(t0);
-TextureCube g_textureCube : register(t2);
+TextureCube g_textureCube : register(t0);
+Texture2D g_texture[4] : register(t1);
 
 struct InstanceData
 {
     float4x4 worldMatrix;
+    uint textureIndex;
 };
 StructuredBuffer<InstanceData> g_instanceData : register(t0, space1);
 
@@ -114,12 +115,14 @@ struct BILLBOARD_VERTEX_INPUT
 {
     float3 position : POSITION;
     float2 size : SIZE;
+    
 };
 
 struct BILLBOARD_GEOMETRY_INPUT
 {
     float4 position : POSITION;
     float2 size : SIZE;
+    uint textureIndex : TEXINDEX;
 };
 
 struct BILLBOARD_PIXEL_INPUT
@@ -127,13 +130,16 @@ struct BILLBOARD_PIXEL_INPUT
     float4 position : SV_POSITION;
     float3 normal : NORMAL;
     float2 uv : TEXCOORD;
+    nointerpolation uint textureIndex : TEXINDEX;
 };
 
 BILLBOARD_GEOMETRY_INPUT BILLBOARD_VERTEX(BILLBOARD_VERTEX_INPUT input, uint instanceID : SV_InstanceID)
 {
     BILLBOARD_GEOMETRY_INPUT output;
-    output.position = mul(float4(input.position, 1.0f), g_instanceData[instanceID].worldMatrix);
+    InstanceData instData = g_instanceData[instanceID];
+    output.position = mul(float4(input.position, 1.0f), instData.worldMatrix);
     output.size = input.size;
+    output.textureIndex = instData.textureIndex;
     return output;
 }
 
@@ -162,11 +168,12 @@ void BILLBOARD_GEOMETRY(point BILLBOARD_GEOMETRY_INPUT input[1],
         output.position = mul(output.position, g_projectionMatrix);
         output.normal = front;
         output.uv = uv[i];
+        output.textureIndex = input[0].textureIndex;
         outStream.Append(output);
     }
 }
 
 float4 BILLBOARD_PIXEL(BILLBOARD_PIXEL_INPUT input) : SV_TARGET
 {
-    return g_texture[0].Sample(g_sampler, input.uv);
+    return g_texture[input.textureIndex].Sample(g_sampler, input.uv);
 }

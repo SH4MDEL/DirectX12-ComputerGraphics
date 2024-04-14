@@ -4,29 +4,22 @@
 #include "texture.h"
 #include "buffer.h"
 
-struct ObjectData : public BufferBase
-{
-	XMFLOAT4X4 worldMatrix;
-};
-
-class GameObject
+class InstanceObject
 {
 public:
-	GameObject(const ComPtr<ID3D12Device>& device);
-	virtual ~GameObject() = default;
+	InstanceObject(const ComPtr<ID3D12Device>& device);
+	virtual ~InstanceObject() = default;
 
 	virtual void Update(FLOAT timeElapsed);
-	virtual void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
-	virtual void UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
 
 	void Transform(XMFLOAT3 shift);
 	void Rotate(FLOAT pitch, FLOAT yaw, FLOAT roll);
 
-	void SetMesh(const shared_ptr<MeshBase>& mesh);
-	void SetTexture(const shared_ptr<Texture>& texture);
-
 	void SetPosition(XMFLOAT3 position);
+	void SetTextureIndex(UINT textureIndex);
+
 	XMFLOAT3 GetPosition() const;
+	UINT GetTextureIndex() const;
 	XMFLOAT4X4 GetWorldMatrix() const;
 
 protected:
@@ -36,13 +29,35 @@ protected:
 	XMFLOAT3			m_up;
 	XMFLOAT3			m_front;
 
+	UINT				m_textureIndex;
+};
+
+struct ObjectData : public BufferBase
+{
+	XMFLOAT4X4 worldMatrix;
+};
+
+class GameObject : public InstanceObject
+{
+public:
+	GameObject(const ComPtr<ID3D12Device>& device);
+	virtual ~GameObject() = default;
+
+	virtual void Update(FLOAT timeElapsed) override;
+	virtual void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
+	virtual void UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
+
+	void SetMesh(const shared_ptr<MeshBase>& mesh);
+	void SetTexture(const shared_ptr<Texture>& texture);
+
+protected:
 	shared_ptr<MeshBase>	m_mesh;
-	shared_ptr<Texture>	m_texture;
+	shared_ptr<Texture>		m_texture;
 
 	unique_ptr<UploadBuffer<ObjectData>> m_constantBuffer;
 };
 
-class RotatingObject : public GameObject
+class RotatingObject : public InstanceObject
 {
 public:
 	RotatingObject(const ComPtr<ID3D12Device>& device);

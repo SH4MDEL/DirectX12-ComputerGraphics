@@ -45,9 +45,10 @@ private:
 
 	shared_ptr<Camera> m_camera;
 	shared_ptr<Player> m_player;
-	vector<shared_ptr<GameObject>> m_objects;
+	vector<shared_ptr<InstanceObject>> m_objects;
 	shared_ptr<GameObject> m_skybox;
 	shared_ptr<Terrain> m_terrain;
 
+	unique_ptr<Instance<Mesh<TextureVertex>>> m_instanceObject;
 	unique_ptr<Instance<Mesh<TextureVertex>>> m_instanceBillboard;
 };

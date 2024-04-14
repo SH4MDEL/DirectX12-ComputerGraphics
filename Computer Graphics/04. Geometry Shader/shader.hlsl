@@ -10,8 +10,8 @@ cbuffer Camera : register(b1)
     float3 g_cameraPosition : packoffset(c8);
 };
 
-Texture2D g_texture[2] : register(t0);
-TextureCube g_textureCube : register(t2);
+TextureCube g_textureCube : register(t0);
+Texture2D g_texture[2] : register(t1);
 
 SamplerState g_sampler : register(s0);
 

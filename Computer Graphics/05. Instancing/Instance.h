@@ -7,6 +7,7 @@
 struct InstanceData : public BufferBase 
 {
 	XMFLOAT4X4 worldMatrix;
+	UINT textureIndex;
 };
 
 template <typename T> requires derived_from<T, MeshBase>
@@ -17,13 +18,13 @@ public:
 
 	void Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
 
-	void SetObject(const shared_ptr<GameObject>& object);
-	void SetObjects(const vector<shared_ptr<GameObject>>& objects);
-	void SetObjects(vector<shared_ptr<GameObject>>&& objects);
+	void SetObject(const shared_ptr<InstanceObject>& object);
+	void SetObjects(const vector<shared_ptr<InstanceObject>>& objects);
+	void SetObjects(vector<shared_ptr<InstanceObject>>&& objects);
 
 private:
 	shared_ptr<T> m_mesh;
-	vector<shared_ptr<GameObject>> m_objects;
+	vector<shared_ptr<InstanceObject>> m_objects;
 	UINT m_maxObjectCount;
 
 	unique_ptr<UploadBuffer<InstanceData>> m_instanceBuffer;
@@ -44,6 +45,7 @@ inline void Instance<T>::Render(const ComPtr<ID3D12GraphicsCommandList>& command
 		InstanceData buffer;
 		XMStoreFloat4x4(&buffer.worldMatrix,
 			XMMatrixTranspose(XMLoadFloat4x4(&object->GetWorldMatrix())));
+		buffer.textureIndex = object->GetTextureIndex();
 		m_instanceBuffer->Copy(buffer, i++);
 	}
 	m_instanceBuffer->UpdateRootShaderResource(commandList);
@@ -52,20 +54,20 @@ inline void Instance<T>::Render(const ComPtr<ID3D12GraphicsCommandList>& command
 }
 
 template<typename T> requires derived_from<T, MeshBase>
-inline void Instance<T>::SetObject(const shared_ptr<GameObject>& object)
+inline void Instance<T>::SetObject(const shared_ptr<InstanceObject>& object)
 {
 	if (m_objects.size() == m_maxObjectCount) return;
 	m_objects.push_back(object);
 }
 
 template<typename T> requires derived_from<T, MeshBase>
-inline void Instance<T>::SetObjects(const vector<shared_ptr<GameObject>>& objects)
+inline void Instance<T>::SetObjects(const vector<shared_ptr<InstanceObject>>& objects)
 {
 	m_objects = objects;
 }
 
 template<typename T> requires derived_from<T, MeshBase>
-inline void Instance<T>::SetObjects(vector<shared_ptr<GameObject>>&& objects)
+inline void Instance<T>::SetObjects(vector<shared_ptr<InstanceObject>>&& objects)
 {
 	m_objects = move(objects);
 }
