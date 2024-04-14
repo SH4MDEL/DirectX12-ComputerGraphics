@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{44ccff17-3cba-4d52-9725-3f94298d3195}</ProjectGuid>
-    <RootNamespace>My04GeometryShader</RootNamespace>
+    <ProjectGuid>{ca9bed19-2f35-48eb-943d-726ef9ec123b}</ProjectGuid>
+    <RootNamespace>My06Tessellation</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -133,10 +133,11 @@
   <ItemGroup>
     <ClInclude Include="..\Common\d3dx12.h" />
     <ClInclude Include="..\Common\DDSTextureLoader12.h" />
-    <ClInclude Include="04. Geometry Shader.h" />
+    <ClInclude Include="06. Tessellation.h" />
     <ClInclude Include="buffer.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Instance.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="player.h" />
@@ -153,7 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\DDSTextureLoader12.cpp" />
-    <ClCompile Include="04. Geometry Shader.cpp" />
+    <ClCompile Include="06. Tessellation.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="framework.cpp" />
     <ClCompile Include="mesh.cpp" />
@@ -166,10 +167,10 @@
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="04. Geometry Shader.rc" />
+    <ResourceCompile Include="06. Tessellation.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="04. Geometry Shader.ico" />
+    <Image Include="06. Tessellation.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>

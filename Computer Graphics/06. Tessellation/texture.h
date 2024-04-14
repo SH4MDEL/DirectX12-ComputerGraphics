@@ -32,3 +32,4 @@ private:
 	vector<ComPtr<ID3D12Resource>>				m_textures;
 	vector<ComPtr<ID3D12Resource>>				m_textureUploadBuffer;
 };
+

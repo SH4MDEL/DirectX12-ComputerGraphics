@@ -131,10 +131,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\d3dx12.h" />
+    <ClInclude Include="..\Common\DDSTextureLoader12.h" />
     <ClInclude Include="03. Terrain.h" />
     <ClInclude Include="camera.h" />
-    <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="object.h" />
@@ -151,9 +151,9 @@
     <ClInclude Include="vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\DDSTextureLoader12.cpp" />
     <ClCompile Include="03. Terrain.cpp" />
     <ClCompile Include="camera.cpp" />
-    <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="framework.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="object.cpp" />

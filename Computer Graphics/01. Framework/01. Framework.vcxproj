@@ -133,7 +133,6 @@
   <ItemGroup>
     <ClInclude Include="01. Framework.h" />
     <ClInclude Include="camera.h" />
-    <ClInclude Include="d3dx12.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="object.h" />

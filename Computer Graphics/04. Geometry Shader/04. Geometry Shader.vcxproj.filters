@@ -27,21 +27,14 @@
     <Filter Include="소스 파일\System">
       <UniqueIdentifier>{de297b2a-90cf-418d-898b-8222dbb5532b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="외부 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="미리 컴파일된 헤더">
       <UniqueIdentifier>{ba8fa71c-b1f6-4ab5-b427-7dedd3356508}</UniqueIdentifier>
     </Filter>
+    <Filter Include="외부 파일">
+      <UniqueIdentifier>{d05fc9f4-5a17-49c8-8882-2783f6bcec94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="d3dx12.h">
-      <Filter>외부 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DDSTextureLoader12.h">
-      <Filter>외부 파일</Filter>
-    </ClInclude>
     <ClInclude Include="04. Geometry Shader.h">
       <Filter>소스 파일\Framework</Filter>
     </ClInclude>
@@ -93,13 +86,16 @@
     <ClInclude Include="buffer.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\d3dx12.h">
+      <Filter>외부 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DDSTextureLoader12.h">
+      <Filter>외부 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="04. Geometry Shader.cpp">
       <Filter>소스 파일\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="DDSTextureLoader12.cpp">
-      <Filter>외부 파일</Filter>
     </ClCompile>
     <ClCompile Include="camera.cpp">
       <Filter>소스 파일\System</Filter>
@@ -130,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>미리 컴파일된 헤더</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DDSTextureLoader12.cpp">
+      <Filter>외부 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

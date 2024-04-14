@@ -1,5 +1,5 @@
 #include "texture.h"
-#include "DDSTextureLoader12.h"
+#include "../Common/DDSTextureLoader12.h"
 
 Texture::Texture(const ComPtr<ID3D12Device>& device)
 {
