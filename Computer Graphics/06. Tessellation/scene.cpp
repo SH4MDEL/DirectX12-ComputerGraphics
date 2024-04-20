@@ -84,8 +84,8 @@ inline void Scene::BuildShaders(const ComPtr<ID3D12Device>& device,
 	m_shaders.insert({ "OBJECT", objectShader });
 	auto skyboxShader = make_shared<SkyboxShader>(device, rootSignature);
 	m_shaders.insert({ "SKYBOX", skyboxShader });
-	auto detailShader = make_shared<DetailShader>(device, rootSignature);
-	m_shaders.insert({ "DETAIL", detailShader });
+	auto terrainShader = make_shared<TerrainShader>(device, rootSignature);
+	m_shaders.insert({ "DETAIL", terrainShader });
 	auto billboardShader = make_shared<BillboardShader>(device, rootSignature);
 	m_shaders.insert({ "BILLBOARD", billboardShader });
 }
@@ -186,18 +186,18 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 			grass0->SetPosition(XMFLOAT3{ fx, m_terrain->GetHeight(fx, fz), fz });
 			grass0->SetTextureIndex(grasses.size() % 4);
 			grasses.push_back(grass0);
-			auto grass1 = make_shared<InstanceObject>(device);
-			grass1->SetPosition(XMFLOAT3{ fx + 0.5f, m_terrain->GetHeight(fx + 0.5f, fz), fz });
-			grass1->SetTextureIndex(grasses.size() % 4);
-			grasses.push_back(grass1);
-			auto grass2 = make_shared<InstanceObject>(device);
-			grass2->SetPosition(XMFLOAT3{ fx, m_terrain->GetHeight(fx, fz + 0.5f), fz + 0.5f });
-			grass2->SetTextureIndex(grasses.size() % 4);
-			grasses.push_back(grass2);
-			auto grass3 = make_shared<InstanceObject>(device);
-			grass3->SetPosition(XMFLOAT3{ fx + 0.5f, m_terrain->GetHeight(fx + 0.5f, fz + 0.5f), fz + 0.5f });
-			grass3->SetTextureIndex(grasses.size() % 4);
-			grasses.push_back(grass3);
+			//auto grass1 = make_shared<InstanceObject>(device);
+			//grass1->SetPosition(XMFLOAT3{ fx + 0.5f, m_terrain->GetHeight(fx + 0.5f, fz), fz });
+			//grass1->SetTextureIndex(grasses.size() % 4);
+			//grasses.push_back(grass1);
+			//auto grass2 = make_shared<InstanceObject>(device);
+			//grass2->SetPosition(XMFLOAT3{ fx, m_terrain->GetHeight(fx, fz + 0.5f), fz + 0.5f });
+			//grass2->SetTextureIndex(grasses.size() % 4);
+			//grasses.push_back(grass2);
+			//auto grass3 = make_shared<InstanceObject>(device);
+			//grass3->SetPosition(XMFLOAT3{ fx + 0.5f, m_terrain->GetHeight(fx + 0.5f, fz + 0.5f), fz + 0.5f });
+			//grass3->SetTextureIndex(grasses.size() % 4);
+			//grasses.push_back(grass3);
 		}
 	}
 	m_instanceBillboard = make_unique<Instance<Mesh<TextureVertex>>>(device,

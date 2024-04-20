@@ -214,19 +214,21 @@ inline void IndexMesh<T>::CreateIndexBuffer(const ComPtr<ID3D12Device>& device,
 	m_indexBufferView.SizeInBytes = indexBufferSize;
 }
 
-class TerrainMesh : public Mesh<DetailVertex>
+class TerrainMesh : public Mesh<TerrainVertex>
 {
 public:
 	TerrainMesh(const ComPtr<ID3D12Device>& device, 
-		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName,
-		D3D12_PRIMITIVE_TOPOLOGY primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName);
 	~TerrainMesh() override = default;
 
-	FLOAT GetHeight(FLOAT x, FLOAT z) const;
+	FLOAT GetHeight(FLOAT x, FLOAT z);
 
 private:
 	void LoadMesh(const ComPtr<ID3D12Device>& device,
 		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName) override;
+
+	void BernsteinBasis(FLOAT t, FLOAT* basis);
+	FLOAT GetBezierSumHeight(INT sx, INT sz, FLOAT* basisU, FLOAT* basisV);
 
 private:
 	vector<vector<FLOAT>> m_height;

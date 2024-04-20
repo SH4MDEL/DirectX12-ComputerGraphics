@@ -27,11 +27,11 @@ public:
 	~SkyboxShader() override = default;
 };
 
-class DetailShader : public Shader
+class TerrainShader : public Shader
 {
 public:
-	DetailShader(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12RootSignature>& rootSignature);
-	~DetailShader() override = default;
+	TerrainShader(const ComPtr<ID3D12Device>& device, const ComPtr<ID3D12RootSignature>& rootSignature);
+	~TerrainShader() override = default;
 };
 
 class BillboardShader : public Shader

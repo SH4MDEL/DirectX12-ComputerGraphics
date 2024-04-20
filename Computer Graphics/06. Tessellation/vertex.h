@@ -20,12 +20,13 @@ struct TextureVertex : public VertexBase
 	XMFLOAT2 uv;
 };
 
-struct DetailVertex : public VertexBase
+struct TerrainVertex : public VertexBase
 {
-	DetailVertex() = default;
-	DetailVertex(XMFLOAT3 position, XMFLOAT2 uv0, XMFLOAT2 uv1) : 
-		position{ position }, uv0{ uv0 }, uv1{ uv1 } {}
+	TerrainVertex() = default;
+	TerrainVertex(XMFLOAT3 position, XMFLOAT2 uv0, XMFLOAT2 uv1, UINT density) :
+		position{ position }, uv0{ uv0 }, uv1{ uv1 }, density{ density } {}
 	XMFLOAT3 position;
 	XMFLOAT2 uv0;
 	XMFLOAT2 uv1;
+	UINT density;
 };
