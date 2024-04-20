@@ -19,10 +19,10 @@ ObjectShader::ObjectShader(const ComPtr<ID3D12Device>& device,
 #endif
 
 	ComPtr<ID3DBlob> mvsByteCode, mpsByteCode;
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "OBJECT_VERTEX", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "OBJECT_PIXEL", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/object.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "VERTEX_MAIN", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/object.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "PIXEL_MAIN", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
 	psoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };
@@ -59,10 +59,10 @@ SkyboxShader::SkyboxShader(const ComPtr<ID3D12Device>& device,
 #endif
 
 	ComPtr<ID3DBlob> mvsByteCode, mpsByteCode;
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "SKYBOX_VERTEX", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "SKYBOX_PIXEL", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/skybox.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "VERTEX_MAIN", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/skybox.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "PIXEL_MAIN", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
 	psoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };
@@ -104,14 +104,14 @@ TerrainShader::TerrainShader(const ComPtr<ID3D12Device>& device,
 #endif
 
 	ComPtr<ID3DBlob> mvsByteCode, mhsByteCode, mdsByteCode, mpsByteCode;
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "TERRAIN_VERTEX", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "TERRAIN_HULL", "hs_5_1", compileFlags, 0, &mhsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "TERRAIN_DOMAIN", "ds_5_1", compileFlags, 0, &mdsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "TERRAIN_PIXEL", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/terrain.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "VERTEX_MAIN", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/terrain.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "HULL_MAIN", "hs_5_1", compileFlags, 0, &mhsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/terrain.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "DOMAIN_MAIN", "ds_5_1", compileFlags, 0, &mdsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/terrain.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "PIXEL_MAIN", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
 	psoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };
@@ -156,12 +156,12 @@ BillboardShader::BillboardShader(const ComPtr<ID3D12Device>& device,
 #endif
 
 	ComPtr<ID3DBlob> mvsByteCode, mgsByteCode, mpsByteCode;
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "BILLBOARD_VERTEX", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "BILLBOARD_GEOMETRY", "gs_5_1", compileFlags, 0, &mgsByteCode, nullptr));
-	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("shader.hlsl"), nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, "BILLBOARD_PIXEL", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/billboard.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "VERTEX_MAIN", "vs_5_1", compileFlags, 0, &mvsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/billboard.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "GEOMETRY_MAIN", "gs_5_1", compileFlags, 0, &mgsByteCode, nullptr));
+	Utiles::ThrowIfFailed(D3DCompileFromFile(TEXT("Shader/billboard.hlsl"), nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, "PIXEL_MAIN", "ps_5_1", compileFlags, 0, &mpsByteCode, nullptr));
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
 	psoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };
