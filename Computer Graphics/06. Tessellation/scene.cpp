@@ -160,7 +160,7 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 			}
 		}
 	}
-	m_instanceObject = make_unique<Instance<Mesh<TextureVertex>>>(device,
+	m_instanceObject = make_unique<Instance>(device,
 		static_pointer_cast<Mesh<TextureVertex>>(m_meshes["CUBE"]), static_cast<UINT>(m_objects.size()));
 	m_instanceObject->SetObjects(m_objects);
 
@@ -200,7 +200,7 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 			//grasses.push_back(grass3);
 		}
 	}
-	m_instanceBillboard = make_unique<Instance<Mesh<TextureVertex>>>(device,
+	m_instanceBillboard = make_unique<Instance>(device,
 		static_pointer_cast<Mesh<TextureVertex>>(m_meshes["BILLBOARD"]), static_cast<UINT>(grasses.size()));
 	m_instanceBillboard->SetObjects(move(grasses));
 }

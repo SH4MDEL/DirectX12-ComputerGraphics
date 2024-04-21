@@ -49,6 +49,6 @@ private:
 	shared_ptr<GameObject> m_skybox;
 	shared_ptr<Terrain> m_terrain;
 
-	unique_ptr<Instance<Mesh<TextureVertex>>> m_instanceObject;
-	unique_ptr<Instance<Mesh<TextureVertex>>> m_instanceBillboard;
+	unique_ptr<Instance> m_instanceObject;
+	unique_ptr<Instance> m_instanceBillboard;
 };

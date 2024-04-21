@@ -115,7 +115,6 @@ struct BILLBOARD_VERTEX_INPUT
 {
     float3 position : POSITION;
     float2 size : SIZE;
-    
 };
 
 struct BILLBOARD_GEOMETRY_INPUT
