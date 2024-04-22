@@ -196,10 +196,10 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 
 void Scene::ReleaseUploadBuffer()
 {
-	for (auto& [name, mesh] : m_meshes) {
+	for (auto& mesh : views::values(m_meshes)) {
 		mesh->ReleaseUploadBuffer();
 	}
-	for (auto& [name, texture] : m_textures) {
+	for (auto& texture : views::values(m_textures)) {
 		texture->ReleaseUploadBuffer();
 	}
 }

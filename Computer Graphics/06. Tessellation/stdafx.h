@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include <concepts>
+#include <ranges>
 #include <random>
 #include <algorithm>
 #include <vector>

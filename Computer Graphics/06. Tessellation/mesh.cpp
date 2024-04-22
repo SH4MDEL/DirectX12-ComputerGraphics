@@ -25,10 +25,10 @@ FLOAT TerrainMesh::GetHeight(FLOAT x, FLOAT z)
 		static_cast<FLOAT>(-m_length / 2),
 		static_cast<FLOAT>(+m_length / 2) };
 	if (range.x > x || range.y < x || range.x > z || range.y < z) return 0.f;
-	const size_t nx = static_cast<size_t>(x + m_length / 2);
-	const size_t nz = static_cast<size_t>(z + m_length / 2);
-	const size_t sx = nx - nx % 4;
-	const size_t sz = nz - nz % 4;
+	const INT nx = static_cast<INT>(x + m_length / 2);
+	const INT nz = static_cast<INT>(z + m_length / 2);
+	const INT sx = nx - nx % 4;
+	const INT sz = nz - nz % 4;
 	const FLOAT fx = x + m_length / 2;
 	const FLOAT fz = z + m_length / 2;
 

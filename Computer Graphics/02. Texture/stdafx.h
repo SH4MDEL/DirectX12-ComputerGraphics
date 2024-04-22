@@ -17,6 +17,7 @@
 #include <tchar.h>
 
 #include <iostream>
+#include <ranges>
 #include <random>
 #include <algorithm>
 #include <vector>
