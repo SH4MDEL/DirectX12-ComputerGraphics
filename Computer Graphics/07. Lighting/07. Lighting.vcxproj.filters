@@ -10,31 +10,32 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="외부 파일">
-      <UniqueIdentifier>{8f6ff4c8-08d2-4f42-aa58-060981bc5602}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="미리 컴파일된 헤더">
-      <UniqueIdentifier>{9eaa9cf9-9617-4041-ac06-93412024fae3}</UniqueIdentifier>
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="셰이더 파일">
-      <UniqueIdentifier>{e5ef71dc-a8b8-4d96-acd0-43c8c323b6dd}</UniqueIdentifier>
+      <UniqueIdentifier>{28169237-d757-46ae-9078-6a8e28042d6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="미리 컴파일된 헤더">
+      <UniqueIdentifier>{3d9bf7d6-5f9c-4354-9d0e-43ce5eb3b97f}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Framework">
-      <UniqueIdentifier>{d2c59e9c-6fba-4b2f-969a-7b534d1a5eb5}</UniqueIdentifier>
+      <UniqueIdentifier>{a96c4028-240c-4702-92b6-0fa381cd757f}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Mesh">
-      <UniqueIdentifier>{aec28fd9-5adc-49e5-b7b2-ad1a85ac4a3c}</UniqueIdentifier>
+      <UniqueIdentifier>{f54b4d2c-0ba9-48a2-844e-82aef1b7d257}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Object">
-      <UniqueIdentifier>{a6a173c4-f4cf-4eb7-8186-e87e9539f985}</UniqueIdentifier>
+      <UniqueIdentifier>{7028d356-89bb-4d3d-a88d-d2cb0e390497}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Scene">
-      <UniqueIdentifier>{3ba4f2ac-fffc-4914-8471-f50feb4202a1}</UniqueIdentifier>
+      <UniqueIdentifier>{b6ff4c52-04ca-4f6b-b266-8d5c2bb8980c}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\System">
-      <UniqueIdentifier>{9cd35437-21f4-47f5-b730-703eb8b46dbd}</UniqueIdentifier>
+      <UniqueIdentifier>{3bcb9d33-9bbe-4e0e-8640-01367642fc6c}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Buffer">
-      <UniqueIdentifier>{dd024146-0391-4698-a22b-a1af3ab3b08d}</UniqueIdentifier>
+      <UniqueIdentifier>{781333d2-153e-4080-8f9c-92f4cb38ccf0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -44,8 +45,14 @@
     <ClInclude Include="..\Common\DDSTextureLoader12.h">
       <Filter>외부 파일</Filter>
     </ClInclude>
-    <ClInclude Include="06. Tessellation.h">
+    <ClInclude Include="07. Lighting.h">
       <Filter>소스 파일\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer.h">
+      <Filter>소스 파일\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>소스 파일\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>소스 파일\Framework</Filter>
@@ -62,40 +69,40 @@
     <ClInclude Include="player.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>소스 파일\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="settings.h">
+    <ClInclude Include="Resource.h">
       <Filter>미리 컴파일된 헤더</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="settings.h">
       <Filter>미리 컴파일된 헤더</Filter>
     </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>소스 파일\System</Filter>
-    </ClInclude>
-    <ClInclude Include="utiles.h">
-      <Filter>미리 컴파일된 헤더</Filter>
+    <ClInclude Include="texture.h">
+      <Filter>소스 파일\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="vertex.h">
       <Filter>소스 파일\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="scene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
       <Filter>미리 컴파일된 헤더</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>미리 컴파일된 헤더</Filter>
     </ClInclude>
-    <ClInclude Include="buffer.h">
+    <ClInclude Include="utiles.h">
+      <Filter>미리 컴파일된 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
       <Filter>소스 파일\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>소스 파일\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="texture.h">
+    <ClInclude Include="material.h">
       <Filter>소스 파일\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
@@ -103,11 +110,17 @@
     <ClCompile Include="..\Common\DDSTextureLoader12.cpp">
       <Filter>외부 파일</Filter>
     </ClCompile>
-    <ClCompile Include="06. Tessellation.cpp">
+    <ClCompile Include="07. Lighting.cpp">
       <Filter>소스 파일\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>소스 파일\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="framework.cpp">
       <Filter>소스 파일\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>소스 파일\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="mesh.cpp">
       <Filter>소스 파일\Mesh</Filter>
@@ -118,11 +131,14 @@
     <ClCompile Include="player.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>소스 파일\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="shader.cpp">
       <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>소스 파일\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>미리 컴파일된 헤더</Filter>
@@ -130,18 +146,15 @@
     <ClCompile Include="timer.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="Instance.cpp">
-      <Filter>소스 파일\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
+    <ClCompile Include="light.cpp">
       <Filter>소스 파일\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="texture.cpp">
+    <ClCompile Include="material.cpp">
       <Filter>소스 파일\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="06. Tessellation.rc">
+    <ResourceCompile Include="07. Lighting.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
@@ -149,24 +162,27 @@
     <Image Include="small.ico">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="06. Tessellation.ico">
+    <Image Include="07. Lighting.ico">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\common.hlsl">
+    <FxCompile Include="Shader\billboard.hlsl">
       <Filter>셰이더 파일</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\skybox.hlsl">
+    <FxCompile Include="Shader\common.hlsl">
       <Filter>셰이더 파일</Filter>
     </FxCompile>
     <FxCompile Include="Shader\object.hlsl">
       <Filter>셰이더 파일</Filter>
     </FxCompile>
+    <FxCompile Include="Shader\skybox.hlsl">
+      <Filter>셰이더 파일</Filter>
+    </FxCompile>
     <FxCompile Include="Shader\terrain.hlsl">
       <Filter>셰이더 파일</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\billboard.hlsl">
+    <FxCompile Include="Shader\lighting.hlsl">
       <Filter>셰이더 파일</Filter>
     </FxCompile>
   </ItemGroup>

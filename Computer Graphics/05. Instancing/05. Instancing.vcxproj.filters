@@ -33,6 +33,9 @@
     <Filter Include="외부 파일">
       <UniqueIdentifier>{96ea4671-632e-4779-b1f2-ed7722b26291}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Buffer">
+      <UniqueIdentifier>{e5001c07-55ae-4a85-8c8a-6ea11609694f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h">
@@ -50,23 +53,11 @@
     <ClInclude Include="framework.h">
       <Filter>소스 파일\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>소스 파일\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>소스 파일\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="mesh.h">
       <Filter>소스 파일\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="vertex.h">
       <Filter>소스 파일\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="buffer.h">
-      <Filter>소스 파일\System</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>소스 파일\System</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
       <Filter>소스 파일\Object</Filter>
@@ -80,9 +71,6 @@
     <ClInclude Include="shader.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>소스 파일\System</Filter>
-    </ClInclude>
     <ClInclude Include="timer.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
@@ -94,6 +82,21 @@
     </ClInclude>
     <ClInclude Include="..\Common\DDSTextureLoader12.h">
       <Filter>외부 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>미리 컴파일된 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>미리 컴파일된 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer.h">
+      <Filter>소스 파일\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>소스 파일\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>소스 파일\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -109,9 +112,6 @@
     <ClCompile Include="mesh.cpp">
       <Filter>소스 파일\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
     <ClCompile Include="object.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
@@ -124,9 +124,6 @@
     <ClCompile Include="shader.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
     <ClCompile Include="timer.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
@@ -135,6 +132,12 @@
     </ClCompile>
     <ClCompile Include="Instance.cpp">
       <Filter>소스 파일\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>소스 파일\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>소스 파일\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

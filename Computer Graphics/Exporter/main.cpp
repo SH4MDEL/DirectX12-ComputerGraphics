@@ -229,11 +229,95 @@ void CreateBillboardMesh()
 	out.write(reinterpret_cast<const char*>(vertices.data()), sizeof(Vertex) * vertices.size());
 }
 
+void CreateCubeNormalMesh()
+{
+	struct Vertex
+	{
+		XMFLOAT3 position;
+		XMFLOAT3 normal;
+		XMFLOAT2 uv;
+	};
+
+	vector<Vertex> vertices;
+	const XMFLOAT3 LEFTDOWNFRONT = { -1.f, -1.f, -1.f };
+	const XMFLOAT3 LEFTDOWNBACK = { -1.f, -1.f, +1.f };
+	const XMFLOAT3 LEFTUPFRONT = { -1.f, +1.f, -1.f };
+	const XMFLOAT3 LEFTUPBACK = { -1.f, +1.f, +1.f };
+	const XMFLOAT3 RIGHTDOWNFRONT = { +1.f, -1.f, -1.f };
+	const XMFLOAT3 RIGHTDOWNBACK = { +1.f, -1.f, +1.f };
+	const XMFLOAT3 RIGHTUPFRONT = { +1.f, +1.f, -1.f };
+	const XMFLOAT3 RIGHTUPBACK = { +1.f, +1.f, +1.f };
+
+	XMFLOAT3 NORMAL = { 0.f, 0.f, -1.f };
+	// Front
+	vertices.emplace_back(LEFTUPFRONT, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(RIGHTUPFRONT, NORMAL, XMFLOAT2{ 1.0f, 0.0f });
+	vertices.emplace_back(RIGHTDOWNFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+
+	vertices.emplace_back(LEFTUPFRONT, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(RIGHTDOWNFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(LEFTDOWNFRONT, NORMAL, XMFLOAT2{ 0.0f, 1.0f });
+
+	NORMAL = { 0.f, 1.f, 0.f };
+	// Up
+	vertices.emplace_back(LEFTUPBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(RIGHTUPBACK, NORMAL, XMFLOAT2{ 1.0f, 0.0f });
+	vertices.emplace_back(RIGHTUPFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+
+	vertices.emplace_back(LEFTUPBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(RIGHTUPFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(LEFTUPFRONT, NORMAL, XMFLOAT2{ 0.0f, 1.0f });
+
+	NORMAL = { 0.f, 0.f, 1.f };
+	// Back
+	vertices.emplace_back(LEFTDOWNBACK, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(RIGHTDOWNBACK, NORMAL, XMFLOAT2{ 0.0f, 1.0f });
+	vertices.emplace_back(RIGHTUPBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+
+	vertices.emplace_back(LEFTDOWNBACK, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(RIGHTUPBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(LEFTUPBACK, NORMAL, XMFLOAT2{ 1.0f, 0.0f });
+
+	NORMAL = { 0.f, -1.f, 0.f };
+	// Down
+	vertices.emplace_back(LEFTDOWNFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(RIGHTDOWNFRONT, NORMAL, XMFLOAT2{ 0.0f, 1.0f });
+	vertices.emplace_back(RIGHTDOWNBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+
+	vertices.emplace_back(LEFTDOWNFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(RIGHTDOWNBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(LEFTDOWNBACK, NORMAL, XMFLOAT2{ 1.0f, 0.0f });
+
+	NORMAL = { -1.f, 0.f, 0.f };
+	// Left
+	vertices.emplace_back(LEFTUPBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(LEFTUPFRONT, NORMAL, XMFLOAT2{ 1.0f, 0.0f });
+	vertices.emplace_back(LEFTDOWNFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+
+	vertices.emplace_back(LEFTUPBACK, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(LEFTDOWNFRONT, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(LEFTDOWNBACK, NORMAL, XMFLOAT2{ 0.0f, 1.0f });
+
+	NORMAL = { 1.f, 0.f, 0.f };
+	// Right													 
+	vertices.emplace_back(RIGHTUPFRONT, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(RIGHTUPBACK, NORMAL, XMFLOAT2{ 1.0f, 0.0f });
+	vertices.emplace_back(RIGHTDOWNBACK, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+
+	vertices.emplace_back(RIGHTUPFRONT, NORMAL, XMFLOAT2{ 0.0f, 0.0f });
+	vertices.emplace_back(RIGHTDOWNBACK, NORMAL, XMFLOAT2{ 1.0f, 1.0f });
+	vertices.emplace_back(RIGHTDOWNFRONT, NORMAL, XMFLOAT2{ 0.0f, 1.0f });
+
+	ofstream out("../Resources/Meshes/CubeNormalMesh.binary", ios::binary);
+	out << vertices.size();
+	out.write(reinterpret_cast<const char*>(vertices.data()), sizeof(Vertex) * vertices.size());
+}
 
 int main()
 {
 	//CreateCubeMesh();
 	//CreateCubeIndexMesh();
 	//CreateSkyboxMesh();
-	CreateBillboardMesh();
+	//CreateBillboardMesh();
+	CreateCubeNormalMesh();
 }

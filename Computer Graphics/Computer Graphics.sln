@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05. Instancing", "05. Insta
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06. Tessellation", "06. Tessellation\06. Tessellation.vcxproj", "{CA9BED19-2F35-48EB-943D-726EF9EC123B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07. Lighting", "07. Lighting\07. Lighting.vcxproj", "{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{CA9BED19-2F35-48EB-943D-726EF9EC123B}.Release|x64.Build.0 = Release|x64
 		{CA9BED19-2F35-48EB-943D-726EF9EC123B}.Release|x86.ActiveCfg = Release|Win32
 		{CA9BED19-2F35-48EB-943D-726EF9EC123B}.Release|x86.Build.0 = Release|Win32
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Debug|x64.ActiveCfg = Debug|x64
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Debug|x64.Build.0 = Debug|x64
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Debug|x86.ActiveCfg = Debug|Win32
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Debug|x86.Build.0 = Debug|Win32
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Release|x64.ActiveCfg = Release|x64
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Release|x64.Build.0 = Release|x64
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Release|x86.ActiveCfg = Release|Win32
+		{90160EDA-2E81-4BF0-B8ED-DD46FA3CFE67}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
