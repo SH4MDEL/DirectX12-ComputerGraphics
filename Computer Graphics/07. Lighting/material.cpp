@@ -13,11 +13,12 @@ void Material::SetMaterial(MaterialData material)
 	m_material.push_back(material);
 }
 
-void Material::SetMaterial(XMFLOAT3 fresnelR0, FLOAT roughness)
+void Material::SetMaterial(XMFLOAT3 fresnelR0, FLOAT roughness, XMFLOAT3 ambient)
 {
 	MaterialData material;
 	material.fresnelR0 = fresnelR0;
 	material.roughness = roughness;
+	material.ambient = ambient;
 	m_material.push_back(material);
 }
 

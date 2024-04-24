@@ -6,6 +6,7 @@ struct MaterialData : public BufferBase
 {
 	XMFLOAT3 fresnelR0;
 	FLOAT roughness;
+	XMFLOAT3 ambient;
 };
 
 class Material
@@ -16,7 +17,7 @@ public:
 	void UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList) const;
 
 	void SetMaterial(MaterialData material);
-	void SetMaterial(XMFLOAT3 fresnelR0, FLOAT roughness);
+	void SetMaterial(XMFLOAT3 fresnelR0, FLOAT roughness, XMFLOAT3 ambient);
 	void CreateShaderVariable(const ComPtr<ID3D12Device>& device);
 
 private:

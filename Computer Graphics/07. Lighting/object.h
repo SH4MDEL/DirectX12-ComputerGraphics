@@ -5,25 +5,19 @@
 #include "material.h"
 #include "buffer.h"
 
-class InstanceObject
+class Object abstract
 {
 public:
-	InstanceObject(const ComPtr<ID3D12Device>& device);
-	virtual ~InstanceObject() = default;
+	Object();
 
-	virtual void Update(FLOAT timeElapsed);
+	virtual void Update(FLOAT timeElapsed) = 0;
 
 	void Transform(XMFLOAT3 shift);
 	void Rotate(FLOAT pitch, FLOAT yaw, FLOAT roll);
 
 	void SetPosition(XMFLOAT3 position);
-	void SetTextureIndex(UINT textureIndex);
-	void SetMaterialIndex(UINT materialIndex);
 
 	XMFLOAT3 GetPosition() const;
-	UINT GetTextureIndex() const;
-	UINT GetMaterialIndex() const;
-	XMFLOAT4X4 GetWorldMatrix() const;
 
 protected:
 	XMFLOAT4X4			m_worldMatrix;
@@ -31,7 +25,22 @@ protected:
 	XMFLOAT3			m_right;
 	XMFLOAT3			m_up;
 	XMFLOAT3			m_front;
+};
 
+struct InstanceData;
+class InstanceObject : public Object
+{
+public:
+	InstanceObject();
+	virtual ~InstanceObject() = default;
+
+	virtual void Update(FLOAT timeElapsed) override;
+	void UpdateShaderVariable(InstanceData& buffer);
+
+	void SetTextureIndex(UINT textureIndex);
+	void SetMaterialIndex(UINT materialIndex);
+
+protected:
 	UINT				m_textureIndex;
 	UINT				m_materialIndex;
 };
@@ -41,7 +50,7 @@ struct ObjectData : public BufferBase
 	XMFLOAT4X4 worldMatrix;
 };
 
-class GameObject : public InstanceObject
+class GameObject : public Object
 {
 public:
 	GameObject(const ComPtr<ID3D12Device>& device);
@@ -66,7 +75,7 @@ protected:
 class RotatingObject : public InstanceObject
 {
 public:
-	RotatingObject(const ComPtr<ID3D12Device>& device);
+	RotatingObject();
 	~RotatingObject() override = default;
 
 	void Update(FLOAT timeElapsed) override;

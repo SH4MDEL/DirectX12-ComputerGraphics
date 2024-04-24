@@ -6,6 +6,7 @@ struct MaterialData
 {
     float3 fresnelR0;
     float roughness;
+    float3 ambient;
 };
 
 cbuffer Material : register(b0, space1)
@@ -64,7 +65,7 @@ float3 SchlickFresnel(float3 r0, float3 normal, float3 lightVector)
 }
 
 float3 BlinnPhong(float3 lightStrength, float3 lightVector, float3 normal, 
-    float3 toEye, float4 diffuse, MaterialData material)
+    float3 toEye, float3 diffuse, MaterialData material)
 {
     float shininess = 1.f - material.roughness;
     const float m = shininess * 256.f;
@@ -75,13 +76,13 @@ float3 BlinnPhong(float3 lightStrength, float3 lightVector, float3 normal,
 
     float3 specular = fresnelFactor * roughnessFactor;
 
-    specular = specular / (specular + 1.0f);
+    specular = specular / (specular + 1.f);
 
-    return (diffuse.rgb + specular) * lightStrength;
+    return (diffuse + specular) * lightStrength;
 }
 
 float3 ComputeDirectionalLight(DirectionalLightData light, float3 normal, 
-    float3 toEye, float4 diffuse, MaterialData material)
+    float3 toEye, float3 diffuse, MaterialData material)
 {
     float3 lightDirection = -light.direction;
 
@@ -92,12 +93,12 @@ float3 ComputeDirectionalLight(DirectionalLightData light, float3 normal,
 }
 
 float3 ComputePointLight(PointLightData light, float3 objectPosition, float3 normal, 
-    float3 toEye, float4 diffuse, MaterialData material)
+    float3 toEye, float3 diffuse, MaterialData material)
 {
     float3 lightVector = light.position - objectPosition;
     float d = length(lightVector);
 
-    if (d > light.fallOffEnd) return 0.0f;
+    if (d > light.fallOffEnd) return float3(0.f, 0.f, 0.f);
 
     lightVector /= d;
     float ndotl = max(dot(lightVector, normal), 0.f);
@@ -110,7 +111,7 @@ float3 ComputePointLight(PointLightData light, float3 objectPosition, float3 nor
 }
 
 float3 ComputeSpotLight(SpotLightData light, float3 objectPosition, float3 normal, 
-    float3 toEye, float4 diffuse, MaterialData material)
+    float3 toEye, float3 diffuse, MaterialData material)
 {
     float3 lightVector = light.position - objectPosition;
     float d = length(lightVector);
@@ -136,14 +137,17 @@ float4 Lighting(float3 objectPosition, float3 normal,
     float3 output = float3(0.f, 0.f, 0.f);
 
     for (int i = 0; i < g_lightNum.x; ++i) {
-        output += ComputeDirectionalLight(g_directionalLights[i], normal, toEye, diffuse, material);
+        output += ComputeDirectionalLight(g_directionalLights[i], normal, toEye, diffuse.rgb, material);
     }
     for (int j = 0; j < g_lightNum.y; ++j) {
-        output += ComputePointLight(g_pointLights[j], objectPosition, normal, toEye, diffuse, material);
+        output += ComputePointLight(g_pointLights[j], objectPosition, normal, toEye, diffuse.rgb, material);
     }
     for (int k = 0; k < g_lightNum.z; ++k) {
-        output += ComputeSpotLight(g_spotLights[k], objectPosition, normal, toEye, diffuse, material);
+        output += ComputeSpotLight(g_spotLights[k], objectPosition, normal, toEye, diffuse.rgb, material);
     }
-
-    return float4(output, 0.f);
+    
+    float3 ambient = material.ambient * diffuse.rgb;
+    output += ambient;
+    
+    return float4(output, diffuse.a);
 }

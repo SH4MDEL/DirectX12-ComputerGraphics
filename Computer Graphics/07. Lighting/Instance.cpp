@@ -9,16 +9,32 @@ Instance::Instance(const ComPtr<ID3D12Device>& device, const shared_ptr<MeshBase
 
 void Instance::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
 {
+	UpdateShaderVariable(commandList);
+
+	m_mesh->Render(commandList, m_objects.size());
+}
+
+void Instance::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
+{
+
 	for (int i = 0; const auto & object : m_objects) {
 		InstanceData buffer;
-		XMStoreFloat4x4(&buffer.worldMatrix,
-			XMMatrixTranspose(XMLoadFloat4x4(&object->GetWorldMatrix())));
-		buffer.textureIndex = object->GetTextureIndex();
+		object->UpdateShaderVariable(buffer);
 		m_instanceBuffer->Copy(buffer, i++);
 	}
 	m_instanceBuffer->UpdateRootShaderResource(commandList);
+	if (m_texture) m_texture->UpdateShaderVariable(commandList);
+	if (m_material) m_material->UpdateShaderVariable(commandList);
+}
 
-	m_mesh->Render(commandList, m_objects.size());
+void Instance::SetTexture(const shared_ptr<Texture>& texture)
+{
+	m_texture = texture;
+}
+
+void Instance::SetMaterial(const shared_ptr<Material>& material)
+{
+	m_material = material;
 }
 
 void Instance::SetObject(const shared_ptr<InstanceObject>& object)

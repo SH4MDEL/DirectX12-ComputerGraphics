@@ -58,8 +58,10 @@ void TerrainMesh::LoadMesh(const ComPtr<ID3D12Device>& device,
 		in.read(reinterpret_cast<char*>(height.data()), m_length * sizeof(BYTE));
 		for (size_t i = 0; auto& dot : line) {
 			dot = static_cast<FLOAT>(height[i++]);
+			dot /= 3.f;
 		}
 	}
+	
 	constexpr INT dx[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
 	constexpr INT dz[] = { 1, 1, 1, 0, 0, -1, -1, -1 };
 	constexpr INT PatchSize{ 5 };

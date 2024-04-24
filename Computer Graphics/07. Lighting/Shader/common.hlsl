@@ -19,6 +19,7 @@ struct InstanceData
 {
     float4x4 worldMatrix;
     uint textureIndex;
+    uint materialIndex;
 };
 StructuredBuffer<InstanceData> g_instanceData : register(t0, space1);
 

@@ -11,6 +11,7 @@ void Light::SetStrength(XMFLOAT3 strength)
 
 DirectionalLight::DirectionalLight(XMFLOAT3 strength, XMFLOAT3 direction) : Light(strength), m_direction{ direction }
 {
+	m_direction = Utiles::Vector3::Normalize(m_direction);
 }
 
 void DirectionalLight::UpdateShaderVariable(DirectionalLightData& buffer)
@@ -21,7 +22,7 @@ void DirectionalLight::UpdateShaderVariable(DirectionalLightData& buffer)
 
 void DirectionalLight::SetDirection(XMFLOAT3 direction)
 {
-	m_direction = direction;
+	m_direction = Utiles::Vector3::Normalize(direction);
 }
 
 PointLight::PointLight(XMFLOAT3 strength, XMFLOAT3 position, FLOAT fallOffStart, FLOAT fallOffEnd) :
@@ -57,6 +58,7 @@ SpotLight::SpotLight(XMFLOAT3 strength, XMFLOAT3 direction, XMFLOAT3 position,
 	Light(strength), m_direction{direction}, m_position{position},
 	m_fallOffStart{fallOffStart}, m_fallOffEnd{fallOffEnd}, m_spotPower{spotPower}
 {
+	m_direction = Utiles::Vector3::Normalize(m_direction);
 }
 
 void SpotLight::UpdateShaderVariable(SpotLightData& buffer)
@@ -71,7 +73,7 @@ void SpotLight::UpdateShaderVariable(SpotLightData& buffer)
 
 void SpotLight::SetDirection(XMFLOAT3 direction)
 {
-	m_direction = direction;
+	m_direction = Utiles::Vector3::Normalize(direction);
 }
 
 void SpotLight::SetPosition(XMFLOAT3 position)
