@@ -50,14 +50,11 @@ void Scene::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
 	m_camera->UpdateShaderVariable(commandList);
 
 	m_shaders.at("OBJECT")->UpdateShaderVariable(commandList);
-	//m_textures.at("BRICK")->UpdateShaderVariable(commandList);
-	//m_instanceObject->Render(commandList);
-	m_player->Render(commandList);
+	m_instanceObject->Render(commandList);
 
 	m_shaders.at("DETAIL")->UpdateShaderVariable(commandList);
 	m_terrain->Render(commandList);
 
-	m_textures.at("GRASS")->UpdateShaderVariable(commandList);
 	m_shaders.at("BILLBOARD")->UpdateShaderVariable(commandList);
 	m_instanceBillboard->Render(commandList);
 
@@ -110,12 +107,13 @@ inline void Scene::BuildMeshes(const ComPtr<ID3D12Device>& device,
 inline void Scene::BuildTextures(const ComPtr<ID3D12Device>& device,
 	const ComPtr<ID3D12GraphicsCommandList>& commandList)
 {
-	auto checkboardTexture = make_shared<Texture>(device, commandList,
+	auto cubeTexture = make_shared<Texture>(device);
+	cubeTexture->LoadTexture(device, commandList,
 		TEXT("../Resources/Textures/Checkboard.dds"), RootParameter::Texture);
-	m_textures.insert({ "CHECKBOARD", checkboardTexture });
-	auto brickTextire = make_shared<Texture>(device, commandList,
+	cubeTexture->LoadTexture(device, commandList,
 		TEXT("../Resources/Textures/Brick.dds"), RootParameter::Texture);
-	m_textures.insert({ "BRICK", brickTextire });
+	cubeTexture->CreateShaderVariable(device);
+	m_textures.insert({ "CUBE", cubeTexture });
 	auto skyboxTexture = make_shared<Texture>(device, commandList,
 		TEXT("../Resources/Textures/Skybox.dds"), RootParameter::TextureCube);
 	m_textures.insert({ "SKYBOX", skyboxTexture });
@@ -143,26 +141,28 @@ inline void Scene::BuildTextures(const ComPtr<ID3D12Device>& device,
 
 inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 {
-	m_player = make_shared<Player>(device);
-	m_player->SetMesh(m_meshes["CUBE"]);
-	m_player->SetTexture(m_textures["CHECKBOARD"]);
+	m_player = make_shared<Player>();
 	m_player->SetPosition(XMFLOAT3{ 0.f, 0.f, 0.f });
+	m_player->SetTextureIndex(0);
 
-	for (int x = -15; x <= 15; x += 5) {
-		for (int y = -15; y <= 15; y += 5) {
-			for (int z = -15; z <= 15; z += 5) {
-				auto object = make_shared<RotatingObject>(device);
+	for (int x = -10; x <= 10; x += 5) {
+		for (int y = 0; y <= 20; y += 5) {
+			for (int z = -10; z <= 10; z += 5) {
+				auto object = make_shared<RotatingObject>();
 				object->SetPosition(XMFLOAT3{
 					static_cast<FLOAT>(x),
 					static_cast<FLOAT>(y),
 					static_cast<FLOAT>(z) });
+				object->SetTextureIndex(1);
 				m_objects.push_back(object);
 			}
 		}
 	}
 	m_instanceObject = make_unique<Instance>(device,
-		static_pointer_cast<Mesh<TextureVertex>>(m_meshes["CUBE"]), static_cast<UINT>(m_objects.size()));
+		static_pointer_cast<Mesh<TextureVertex>>(m_meshes["CUBE"]), static_cast<UINT>(m_objects.size() + 1));
 	m_instanceObject->SetObjects(m_objects);
+	m_instanceObject->SetObject(m_player);
+	m_instanceObject->SetTexture(m_textures["CUBE"]);
 
 	m_camera = make_shared<ThirdPersonCamera>(device);
 	m_camera->SetLens(0.25 * XM_PI, g_framework->GetAspectRatio(), 0.1f, 1000.f);
@@ -182,19 +182,19 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 		for (int z = -127; z <= 127; z += 1) {
 			FLOAT fx = static_cast<FLOAT>(x);
 			FLOAT fz = static_cast<FLOAT>(z);
-			auto grass0 = make_shared<InstanceObject>(device);
+			auto grass0 = make_shared<InstanceObject>();
 			grass0->SetPosition(XMFLOAT3{ fx, m_terrain->GetHeight(fx, fz), fz });
 			grass0->SetTextureIndex(grasses.size() % 4);
 			grasses.push_back(grass0);
-			//auto grass1 = make_shared<InstanceObject>(device);
+			//auto grass1 = make_shared<InstanceObject>();
 			//grass1->SetPosition(XMFLOAT3{ fx + 0.5f, m_terrain->GetHeight(fx + 0.5f, fz), fz });
 			//grass1->SetTextureIndex(grasses.size() % 4);
 			//grasses.push_back(grass1);
-			//auto grass2 = make_shared<InstanceObject>(device);
+			//auto grass2 = make_shared<InstanceObject>();
 			//grass2->SetPosition(XMFLOAT3{ fx, m_terrain->GetHeight(fx, fz + 0.5f), fz + 0.5f });
 			//grass2->SetTextureIndex(grasses.size() % 4);
 			//grasses.push_back(grass2);
-			//auto grass3 = make_shared<InstanceObject>(device);
+			//auto grass3 = make_shared<InstanceObject>();
 			//grass3->SetPosition(XMFLOAT3{ fx + 0.5f, m_terrain->GetHeight(fx + 0.5f, fz + 0.5f), fz + 0.5f });
 			//grass3->SetTextureIndex(grasses.size() % 4);
 			//grasses.push_back(grass3);
@@ -203,6 +203,7 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 	m_instanceBillboard = make_unique<Instance>(device,
 		static_pointer_cast<Mesh<TextureVertex>>(m_meshes["BILLBOARD"]), static_cast<UINT>(grasses.size()));
 	m_instanceBillboard->SetObjects(move(grasses));
+	m_instanceBillboard->SetTexture(m_textures["GRASS"]);
 }
 
 void Scene::ReleaseUploadBuffer()

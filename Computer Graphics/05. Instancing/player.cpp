@@ -1,7 +1,7 @@
 #include "player.h"
 
-Player::Player(const ComPtr<ID3D12Device>& device) : 
-	GameObject(device), m_speed{Settings::PlayerSpeed}
+Player::Player() :
+	InstanceObject(), m_speed{ Settings::PlayerSpeed }
 {
 }
 
@@ -17,6 +17,17 @@ void Player::KeyboardEvent(FLOAT timeElapsed)
 	XMFLOAT3 right{ m_camera->GetU() };
 	XMFLOAT3 left{ Utiles::Vector3::Negate(right) };
 	XMFLOAT3 direction{};
+
+	if (GetAsyncKeyState('R')) {
+		auto position = GetPosition();
+		position.y += m_speed * timeElapsed;
+		SetPosition(position);
+	}
+	if (GetAsyncKeyState('F')) {
+		auto position = GetPosition();
+		position.y -= m_speed * timeElapsed;
+		SetPosition(position);
+	}
 
 	if (GetAsyncKeyState('W') && GetAsyncKeyState('A') & 0x8000) {
 		direction = Utiles::Vector3::Normalize(Utiles::Vector3::Add(front, left));

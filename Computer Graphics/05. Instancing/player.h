@@ -2,10 +2,10 @@
 #include "object.h"
 #include "camera.h"
 
-class Player : public GameObject
+class Player : public InstanceObject
 {
 public:
-	Player(const ComPtr<ID3D12Device>& device);
+	Player();
 	~Player() override = default;
 
 	void MouseEvent(FLOAT timeElapsed);
