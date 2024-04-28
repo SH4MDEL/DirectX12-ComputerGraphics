@@ -1,6 +1,6 @@
 #define MaxDirectionalLight 5
 #define MaxPointLight 10
-#define MaxSpotLight 10
+#define MaxSpotLight 130
 
 struct MaterialData
 {

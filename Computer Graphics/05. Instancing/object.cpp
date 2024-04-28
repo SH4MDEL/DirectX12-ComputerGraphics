@@ -37,7 +37,6 @@ XMFLOAT3 Object::GetPosition() const
 InstanceObject::InstanceObject() : Object(),
 m_textureIndex{ 0 }
 {
-
 }
 
 void InstanceObject::Update(FLOAT timeElapsed)

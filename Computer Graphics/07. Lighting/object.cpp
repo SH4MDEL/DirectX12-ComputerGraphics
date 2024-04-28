@@ -126,3 +126,14 @@ FLOAT Terrain::GetHeight(FLOAT x, FLOAT z)
 		GetHeight(x - position.x, z - position.z) + position.y + 0.3f;
 }
 
+LightObject::LightObject(const shared_ptr<SpotLight>& light) : 
+	RotatingObject(), m_light{light}
+{
+}
+
+void LightObject::Update(FLOAT timeElapsed)
+{
+	RotatingObject::Update(timeElapsed);
+	m_light->SetDirection(m_front);
+	m_light->SetPosition(GetPosition());
+}

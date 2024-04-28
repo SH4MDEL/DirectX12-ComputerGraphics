@@ -13,7 +13,8 @@ void MeshBase::ReleaseUploadBuffer()
 }
 
 TerrainMesh::TerrainMesh(const ComPtr<ID3D12Device>& device,
-	const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName)
+	const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName) :
+	m_patchLength{ 4 }
 {
 	m_primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_25_CONTROL_POINT_PATCHLIST;
 	LoadMesh(device, commandList, fileName);
@@ -62,39 +63,43 @@ void TerrainMesh::LoadMesh(const ComPtr<ID3D12Device>& device,
 		}
 	}
 	
-	constexpr INT dx[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
-	constexpr INT dz[] = { 1, 1, 1, 0, 0, -1, -1, -1 };
-	constexpr INT PatchSize{ 5 };
-	constexpr INT BezierPoint{ PatchSize - 1 };
-	m_grid = 1.f / static_cast<FLOAT>(m_length);
+	auto filter = views::filter([=](INT x) noexcept { return (x % m_patchLength) == 0; });
+
 	vector<TerrainVertex> vertices;
-	for (INT gz = (m_length - 1) / BezierPoint; gz > 0; --gz) {
-		for (INT gx = 0; gx < (m_length - 1) / BezierPoint; ++gx) {
-			XMINT2 Range{ gz * BezierPoint, gx * BezierPoint };
-			for (INT z = Range.x; z >= Range.x - BezierPoint; --z) {
-				for (INT x = Range.y; x <= Range.y + BezierPoint; ++x) {
-					FLOAT nx = static_cast<FLOAT>(x - half);
-					FLOAT nz = static_cast<FLOAT>(z - half);
-					const XMFLOAT2 uv0{ static_cast<FLOAT>(x) / (m_length - 1),
-						1.f - static_cast<FLOAT>(z) / (m_length - 1) };
-					const XMFLOAT2 uv1{ static_cast<FLOAT>(x - Range.y) / static_cast<FLOAT>(BezierPoint),
-						static_cast<FLOAT>(Range.x - z) / static_cast<FLOAT>(BezierPoint) };
-
-					INT density = 0;
-					for (int i = 0; i < 8; ++i) {
-						INT tz = z + dz[i], tx = x + dx[i];
-						if (tz < 0 || tz >= m_length || tx < 0 || tx >= m_length) continue;
-						density = max(density, static_cast<INT>(abs(m_height[z][x] - m_height[tz][tx])));
-					}
-
-					vertices.emplace_back(
-						XMFLOAT3{ nx, m_height[z][x], nz }, uv0, uv1, density);
-				}
-			}
+	for (const auto& pz : views::iota(m_patchLength, m_length) | views::reverse) {
+		if (pz % m_patchLength != 0) continue;
+		for (const auto& px : views::iota(0, m_length - m_patchLength) | filter) {
+			CreatePatch(vertices, pz, pz - m_patchLength, px, px + m_patchLength);
 		}
 	}
 
 	CreateVertexBuffer(device, commandList, vertices);
+}
+
+void TerrainMesh::CreatePatch(vector<TerrainVertex>& vertices, INT zStart, INT zEnd, INT xStart, INT xEnd)
+{
+	constexpr INT dx[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
+	constexpr INT dz[] = { 1, 1, 1, 0, 0, -1, -1, -1 };
+	for (INT z : views::iota(zEnd, zStart + 1) | views::reverse) {
+		for (INT x : views::iota(xStart, xEnd + 1)) {
+			const XMFLOAT2 uv0{ static_cast<FLOAT>(x) / (m_length - 1),
+				1.f - static_cast<FLOAT>(z) / (m_length - 1) };
+			const XMFLOAT2 uv1{ static_cast<FLOAT>(x - xStart) / m_patchLength,
+				static_cast<FLOAT>(zStart - z) / m_patchLength };
+
+			INT density = 0;
+			for (INT i : views::iota(0, 8)) {
+				INT tz = z + dz[i], tx = x + dx[i];
+				if (tz < 0 || tz >= m_length || tx < 0 || tx >= m_length) continue;
+				density = max(density, static_cast<INT>(abs(m_height[z][x] - m_height[tz][tx])));
+			}
+
+			FLOAT nx = static_cast<FLOAT>(x - m_length / 2);
+			FLOAT nz = static_cast<FLOAT>(z - m_length / 2);
+			vertices.emplace_back(
+				XMFLOAT3{ nx, m_height[z][x], nz }, uv0, uv1, density);
+		}
+	}
 }
 
 void TerrainMesh::BernsteinBasis(FLOAT t, FLOAT* basis)

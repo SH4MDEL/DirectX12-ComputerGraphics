@@ -15,7 +15,6 @@ public:
 	void Rotate(FLOAT pitch, FLOAT yaw, FLOAT roll);
 
 	void SetPosition(XMFLOAT3 position);
-
 	XMFLOAT3 GetPosition() const;
 
 protected:

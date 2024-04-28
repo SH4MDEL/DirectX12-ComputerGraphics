@@ -4,6 +4,7 @@
 #include "texture.h"
 #include "material.h"
 #include "buffer.h"
+#include "light.h"
 
 class Object abstract
 {
@@ -76,12 +77,23 @@ class RotatingObject : public InstanceObject
 {
 public:
 	RotatingObject();
-	~RotatingObject() override = default;
+	virtual ~RotatingObject() override = default;
 
-	void Update(FLOAT timeElapsed) override;
+	virtual void Update(FLOAT timeElapsed) override;
 
 private:
 	FLOAT m_rotatingSpeed;
+};
+
+class LightObject : public RotatingObject
+{
+public:
+	LightObject(const shared_ptr<SpotLight>& light);
+	~LightObject() override = default;
+
+	virtual void Update(FLOAT timeElapsed) override;
+private:
+	shared_ptr<SpotLight> m_light;
 };
 
 class Terrain : public GameObject

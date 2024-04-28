@@ -36,7 +36,7 @@ protected:
 	XMFLOAT3			m_front;
 
 	shared_ptr<MeshBase>	m_mesh;
-	shared_ptr<Texture>	m_texture;
+	shared_ptr<Texture>		m_texture;
 
 	unique_ptr<UploadBuffer<ObjectData>> m_constantBuffer;
 };

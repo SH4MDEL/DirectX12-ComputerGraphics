@@ -175,7 +175,7 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 	m_terrain = make_shared<Terrain>(device);
 	m_terrain->SetMesh(m_meshes["TERRAIN"]);
 	m_terrain->SetTexture(m_textures["TERRAIN"]);
-	m_terrain->SetPosition(XMFLOAT3{ 0.f, -100.f, 0.f });
+	m_terrain->SetPosition(XMFLOAT3{ 0.f, -30.f, 0.f });
 
 	vector<shared_ptr<InstanceObject>> grasses;
 	for (int x = -127; x <= 127; x += 1) {

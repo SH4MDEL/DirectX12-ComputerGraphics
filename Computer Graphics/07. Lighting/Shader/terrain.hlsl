@@ -63,11 +63,10 @@ float GetMaxTessFactor(uint dencity)
 float CalcTessFactor(float4 center, uint maxDencity)
 {
     float maxTessFactor = GetMaxTessFactor(maxDencity);
-    maxTessFactor = 64.f;
     float3 d = distance(g_cameraPosition, center.xyz);
     const float d0 = 20.f;
     const float d1 = 100.f;
-    return clamp(20.f * saturate((d1 - d) / (d1 - d0)), min(maxTessFactor, 3.f), min(maxTessFactor, 64.f));
+    return clamp(20.f * saturate((d1 - d) / (d1 - d0)), 3.f, 64.f);
 }
 
 PatchTess CONSTANT_HULL(InputPatch<HULL_INPUT, 25> patch, uint patchID : SV_PrimitiveID)
@@ -118,34 +117,33 @@ void BernsteinBasis(float t, out float basis[5])
     basis[4] = t * t * t * t;
 }
 
-float3 LineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch, uint start, float basis[5])
+float3 LineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch, uint index[5], float basis[5])
 {
-    return basis[0] * patch[start].position +
-    basis[1] * patch[start + 1].position +
-    basis[2] * patch[start + 2].position +
-    basis[3] * patch[start + 3].position +
-    basis[4] * patch[start + 4].position;
+    float3 sum = float3(0.f, 0.f, 0.f);
+    for (int i = 0; i < 5; ++i) {
+        sum += basis[i] * patch[index[i]].position;
+    }
+    return sum;
 }
 
 float3 CubicBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch, float basisU[5], float basisV[5])
 {
     float3 sum = float3(0.f, 0.f, 0.f);
-    sum = basisV[0] * LineBezierSum(patch, 0, basisU);
-    sum += basisV[1] * LineBezierSum(patch, 5, basisU);
-    sum += basisV[2] * LineBezierSum(patch, 10, basisU);
-    sum += basisV[3] * LineBezierSum(patch, 15, basisU);
-    sum += basisV[4] * LineBezierSum(patch, 20, basisU);
+    for (int i = 0; i < 5; ++i) {
+        uint index[5] = { i * 5, i * 5 + 1, i * 5 + 2, i * 5 + 3, i * 5 + 4 };
+        sum += basisV[i] * LineBezierSum(patch, index, basisU);
+    }
     return sum;
 }
 
-void dBernsteinBasis(float t, out float basis[5])
+float3 dBernsteinInterpolate(float t, float3 curve[5])
 {
     float invT = 1.f - t;
-    basis[0] = -4.f * invT * invT * invT;
-    basis[1] = 4.f * invT * invT * invT - 12.f * t * invT * invT;
-    basis[2] = -12.f * t * t * invT + 12.f * invT * invT * t;
-    basis[3] = -4.f * t * t * t + 12.f * t * t * invT;
-    basis[4] = 4.f * t * t * t;
+    return curve[0] * -4.f * invT * invT * invT +
+           curve[1] * (+4.f * invT * invT * invT - 12.f * t * invT * invT) +
+           curve[2] * (-12.f * t * t * invT + 12.f * invT * invT * t) +
+           curve[3] * (-4.f * t * t * t + 12.f * t * t * invT) +
+           curve[4] * (+4.f * t * t * t);
 }
 
 float3 dULineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch, 
@@ -153,21 +151,10 @@ float3 dULineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch,
 {
     float3 curve[5];
     for (int i = 0; i < 5; ++i) {
-        curve[i] = basisV[0] * patch[i].position +
-                    basisV[1] * patch[i + 5].position +
-                    basisV[2] * patch[i + 10].position +
-                    basisV[3] * patch[i + 15].position +
-                    basisV[4] * patch[i + 20].position;
+        uint uindex[5] = { i, i + 5, i + 10, i + 15, i + 20 };
+        curve[i] = LineBezierSum(patch, uindex, basisV);
     }
-
-    float dbasisU[5];
-    dBernsteinBasis(u, dbasisU);
-    
-    return curve[0] * dbasisU[0] +
-        curve[1] * dbasisU[1] +
-        curve[2] * dbasisU[2] +
-        curve[3] * dbasisU[3] +
-        curve[4] * dbasisU[4];
+    return dBernsteinInterpolate(u, curve);
 }
 
 float3 dVLineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch,
@@ -175,21 +162,10 @@ float3 dVLineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch,
 {
     float3 curve[5];
     for (int i = 0; i < 5; ++i) {
-        curve[i] = basisU[0] * patch[i * 5].position +
-                    basisU[1] * patch[i * 5 + 1].position +
-                    basisU[2] * patch[i * 5 + 2].position +
-                    basisU[3] * patch[i * 5 + 3].position +
-                    basisU[4] * patch[i * 5 + 4].position;
+        uint vindex[5] = { i * 5, i * 5 + 1, i * 5 + 2, i * 5 + 3, i * 5 + 4 };
+        curve[i] = LineBezierSum(patch, vindex, basisU);
     }
-
-    float dbasisV[5];
-    dBernsteinBasis(v, dbasisV);
-    
-    return curve[0] * dbasisV[0] +
-        curve[1] * dbasisV[1] +
-        curve[2] * dbasisV[2] +
-        curve[3] * dbasisV[3] +
-        curve[4] * dbasisV[4];
+    return dBernsteinInterpolate(v, curve);
 }
 
 [domain("quad")]

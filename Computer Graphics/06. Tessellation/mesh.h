@@ -227,11 +227,13 @@ private:
 	void LoadMesh(const ComPtr<ID3D12Device>& device,
 		const ComPtr<ID3D12GraphicsCommandList>& commandList, const wstring& fileName) override;
 
+	void CreatePatch(vector<TerrainVertex>& vertices, INT zStart, INT zEnd, INT xStart, INT xEnd);
+
 	void BernsteinBasis(FLOAT t, FLOAT* basis);
 	FLOAT GetBezierSumHeight(INT sx, INT sz, FLOAT* basisU, FLOAT* basisV);
 
 private:
 	vector<vector<FLOAT>> m_height;
 	INT m_length;
-	FLOAT m_grid;
+	INT m_patchLength;
 };

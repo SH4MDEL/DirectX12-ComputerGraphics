@@ -175,7 +175,13 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 	for (int x = -10; x <= 10; x += 5) {
 		for (int y = 0; y <= 20; y += 5) {
 			for (int z = -10; z <= 10; z += 5) {
-				auto object = make_shared<RotatingObject>();
+				auto light = make_shared<SpotLight>(
+					XMFLOAT3{ 0.7f, 0.7f, 0.7f }, 
+					XMFLOAT3{ 1.f, 0.f, 0.f },
+					XMFLOAT3{ 0.f, 0.f, 0.f }, 
+					1.f, 50.f, 80.f);
+				m_lightSystem->SetSpotLight(light);
+				auto object = make_shared<LightObject>(light);
 				object->SetPosition(XMFLOAT3{
 					static_cast<FLOAT>(x),
 					static_cast<FLOAT>(y),

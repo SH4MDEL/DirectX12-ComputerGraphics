@@ -65,7 +65,7 @@ float CalcTessFactor(float4 center, uint maxDencity)
     float3 d = distance(g_cameraPosition, center.xyz);
     const float d0 = 20.f;
     const float d1 = 100.f;
-    return clamp(20.f * saturate((d1 - d) / (d1 - d0)), min(maxTessFactor, 3.f), min(maxTessFactor, 64.f));
+    return clamp(20.f * saturate((d1 - d) / (d1 - d0)), 3.f, 64.f);
 }
 
 PatchTess CONSTANT_HULL(InputPatch<HULL_INPUT, 25> patch, uint patchID : SV_PrimitiveID)
@@ -114,23 +114,24 @@ void BernsteinBasis(float t, out float basis[5])
     basis[4] = t * t * t * t;
 }
 
-float3 LineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch, uint start, float basis[5])
+float3 LineBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch, uint index[5], float basis[5])
 {
-    return basis[0] * patch[start].position +
-    basis[1] * patch[start + 1].position +
-    basis[2] * patch[start + 2].position +
-    basis[3] * patch[start + 3].position +
-    basis[4] * patch[start + 4].position;
+    float3 sum = float3(0.f, 0.f, 0.f);
+    for (int i = 0; i < 5; ++i)
+    {
+        sum += basis[i] * patch[index[i]].position;
+    }
+    return sum;
 }
 
 float3 CubicBezierSum(OutputPatch<DOMAIN_INPUT, 25> patch, float basisU[5], float basisV[5])
 {
     float3 sum = float3(0.f, 0.f, 0.f);
-    sum += basisV[0] * LineBezierSum(patch, 0, basisU);
-    sum += basisV[1] * LineBezierSum(patch, 5, basisU);
-    sum += basisV[2] * LineBezierSum(patch, 10, basisU);
-    sum += basisV[3] * LineBezierSum(patch, 15, basisU);
-    sum += basisV[4] * LineBezierSum(patch, 20, basisU);
+    for (int i = 0; i < 5; ++i)
+    {
+        uint index[5] = { i * 5, i * 5 + 1, i * 5 + 2, i * 5 + 3, i * 5 + 4 };
+        sum += basisV[i] * LineBezierSum(patch, index, basisU);
+    }
     return sum;
 }
 
