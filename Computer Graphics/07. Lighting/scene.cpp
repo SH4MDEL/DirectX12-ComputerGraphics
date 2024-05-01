@@ -38,6 +38,7 @@ void Scene::KeyboardEvent(FLOAT timeElapsed)
 void Scene::Update(FLOAT timeElapsed)
 {
 	m_player->Update(timeElapsed);
+	m_sun->Update(timeElapsed);
 
 	for (auto& object : m_objects) {
 		object->Update(timeElapsed);
@@ -164,9 +165,10 @@ inline void Scene::BuildMaterials(const ComPtr<ID3D12Device>& device,
 inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 {
 	m_lightSystem = make_unique<LightSystem>(device);
-	auto diectionalLight = make_shared<DirectionalLight>(
-		XMFLOAT3{0.9f, 0.9f, 0.8f}, XMFLOAT3{0.f, -1.f, -1.f});
-	m_lightSystem->SetDirectionalLight(diectionalLight);
+	auto sunLight = make_shared<DirectionalLight>();
+	m_sun = make_unique<Sun>(sunLight);
+	m_sun->SetStrength(XMFLOAT3{ 1.3f, 1.2f, 1.2f });
+	m_lightSystem->SetDirectionalLight(sunLight);
 
 	m_player = make_shared<Player>();
 	m_player->SetPosition(XMFLOAT3{ 0.f, 0.f, 0.f });

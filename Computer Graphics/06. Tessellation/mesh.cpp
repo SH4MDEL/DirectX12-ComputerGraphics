@@ -115,15 +115,20 @@ void TerrainMesh::BernsteinBasis(FLOAT t, FLOAT* basis)
 FLOAT TerrainMesh::GetBezierSumHeight(INT sx, INT sz, FLOAT* basisU, FLOAT* basisV)
 {
 	FLOAT sum = 0.f;
-	sum += basisV[0] * (basisU[0] * m_height[sz][sx] + basisU[1] * m_height[sz][sx + 1] + basisU[2] * 
-		m_height[sz][sx + 2] + basisU[3] * m_height[sz][sx + 3] + basisU[4] * m_height[sz][sx + 4]);
-	sum += basisV[1] * (basisU[0] * m_height[sz + 1][sx] + basisU[1] * m_height[sz + 1][sx + 1] + basisU[2] * 
-		m_height[sz + 1][sx + 2] + basisU[3] * m_height[sz + 1][sx + 3] + basisU[4] * m_height[sz + 1][sx + 4]);
-	sum += basisV[2] * (basisU[0] * m_height[sz + 2][sx] + basisU[1] * m_height[sz + 2][sx + 1] + basisU[2] * 
-		m_height[sz + 2][sx + 2] + basisU[3] * m_height[sz + 2][sx + 3] + basisU[4] * m_height[sz + 2][sx + 4]);
-	sum += basisV[3] * (basisU[0] * m_height[sz + 3][sx] + basisU[1] * m_height[sz + 3][sx + 1] + basisU[2] * 
-		m_height[sz + 3][sx + 2] + basisU[3] * m_height[sz + 3][sx + 3] + basisU[4] * m_height[sz + 3][sx + 4]);
-	sum += basisV[4] * (basisU[0] * m_height[sz + 4][sx] + basisU[1] * m_height[sz + 4][sx + 1] + basisU[2] * 
-		m_height[sz + 4][sx + 2] + basisU[3] * m_height[sz + 4][sx + 3] + basisU[4] * m_height[sz + 4][sx + 4]);
+	sum += basisV[0] * (basisU[0] * m_height[sz][sx] + 
+		basisU[1] * m_height[sz][sx + 1] + basisU[2] * m_height[sz][sx + 2] + 
+		basisU[3] * m_height[sz][sx + 3] + basisU[4] * m_height[sz][sx + 4]);
+	sum += basisV[1] * (basisU[0] * m_height[sz + 1][sx] + 
+		basisU[1] * m_height[sz + 1][sx + 1] + basisU[2] * m_height[sz + 1][sx + 2] + 
+		basisU[3] * m_height[sz + 1][sx + 3] + basisU[4] * m_height[sz + 1][sx + 4]);
+	sum += basisV[2] * (basisU[0] * m_height[sz + 2][sx] + 
+		basisU[1] * m_height[sz + 2][sx + 1] + basisU[2] * m_height[sz + 2][sx + 2] + 
+		basisU[3] * m_height[sz + 2][sx + 3] + basisU[4] * m_height[sz + 2][sx + 4]);
+	sum += basisV[3] * (basisU[0] * m_height[sz + 3][sx] + 
+		basisU[1] * m_height[sz + 3][sx + 1] + basisU[2] * m_height[sz + 3][sx + 2] + 
+		basisU[3] * m_height[sz + 3][sx + 3] + basisU[4] * m_height[sz + 3][sx + 4]);
+	sum += basisV[4] * (basisU[0] * m_height[sz + 4][sx] + 
+		basisU[1] * m_height[sz + 4][sx + 1] + basisU[2] * m_height[sz + 4][sx + 2] + 
+		basisU[3] * m_height[sz + 4][sx + 3] + basisU[4] * m_height[sz + 4][sx + 4]);
 	return sum;
 }

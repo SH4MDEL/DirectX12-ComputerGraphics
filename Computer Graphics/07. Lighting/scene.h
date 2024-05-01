@@ -49,6 +49,7 @@ private:
 	unordered_map<string, shared_ptr<Material>> m_materials;
 
 	unique_ptr<LightSystem> m_lightSystem;
+	unique_ptr<Sun>		m_sun;
 	shared_ptr<Camera> m_camera;
 	shared_ptr<Player> m_player;
 	vector<shared_ptr<InstanceObject>> m_objects;

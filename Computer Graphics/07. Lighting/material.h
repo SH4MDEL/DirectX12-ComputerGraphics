@@ -23,6 +23,4 @@ public:
 private:
 	vector<MaterialData> m_material;
 	unique_ptr<UploadBuffer<MaterialData>> m_constantBuffer;
-
 };
-

@@ -5,7 +5,7 @@
 class Light
 {
 public:
-    Light() = default;
+    Light();
     Light(XMFLOAT3 strength);
 
     void SetStrength(XMFLOAT3 strength);
@@ -25,7 +25,7 @@ struct DirectionalLightData
 class DirectionalLight : public Light
 {
 public:
-    DirectionalLight() = default;
+    DirectionalLight();
     DirectionalLight(XMFLOAT3 strength, XMFLOAT3 direction);
 
     void UpdateShaderVariable(DirectionalLightData& buffer);
@@ -47,7 +47,7 @@ struct PointLightData
 class PointLight : public Light
 {
 public:
-    PointLight() = default;
+    PointLight();
     PointLight(XMFLOAT3 strength, XMFLOAT3 position, FLOAT fallOffStart, FLOAT fallOffEnd);
 
     void UpdateShaderVariable(PointLightData& buffer);
@@ -75,7 +75,7 @@ struct SpotLightData
 class SpotLight : public Light
 {
 public:
-    SpotLight() = default;
+    SpotLight();
     SpotLight(XMFLOAT3 strength, XMFLOAT3 direction, XMFLOAT3 position, 
         FLOAT fallOffStart, FLOAT fallOffEnd, FLOAT spotPower);
 

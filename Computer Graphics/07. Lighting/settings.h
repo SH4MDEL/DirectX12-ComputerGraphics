@@ -12,7 +12,9 @@ namespace Settings
     constexpr FLOAT CameraMinPitch = XM_PIDIV2 - 0.6f;
     constexpr FLOAT CameraMaxPitch = XM_PIDIV2 + 0.2f;
 
-    constexpr FLOAT PlayerSpeed = 100.f;
+    constexpr FLOAT SunRadius = 80.f;
+
+    constexpr FLOAT PlayerSpeed = 10.f;
 
     constexpr UINT MaxDirectionalLight = 5;
     constexpr UINT MaxPointLight = 10;

@@ -104,3 +104,22 @@ public:
 
 	FLOAT GetHeight(FLOAT x, FLOAT z);
 };
+
+class Sun : public InstanceObject
+{
+public:
+	Sun(const shared_ptr<DirectionalLight>& light);
+	~Sun() override = default;
+
+	void SetStrength(XMFLOAT3 strength);
+
+	void Update(FLOAT timeElapsed) override;
+
+private:
+	shared_ptr<DirectionalLight> m_light;
+
+	XMFLOAT3 m_strength;
+	FLOAT m_phi;
+	FLOAT m_theta;
+	const FLOAT m_radius;
+};

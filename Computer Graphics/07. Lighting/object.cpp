@@ -137,3 +137,29 @@ void LightObject::Update(FLOAT timeElapsed)
 	m_light->SetDirection(m_front);
 	m_light->SetPosition(GetPosition());
 }
+
+Sun::Sun(const shared_ptr<DirectionalLight>& light) : m_light{light}, 
+	m_strength{1.f, 1.f, 1.f}, m_phi{0.f}, m_theta{0.f}, m_radius{ Settings::SunRadius }
+{
+}
+
+void Sun::SetStrength(XMFLOAT3 strength)
+{
+	m_strength = strength;
+}
+
+void Sun::Update(FLOAT timeElapsed)
+{
+	m_phi += timeElapsed * 0.4f;
+
+	FLOAT cosine = cos(m_phi);
+	XMFLOAT3 offset{
+		m_radius * sin(m_phi) * cos(m_theta),
+		m_radius * cosine,
+		m_radius * sin(m_phi) * sin(m_theta) };
+
+	SetPosition(offset);
+	m_light->SetDirection(Utiles::Vector3::Negate(GetPosition()));
+	m_light->SetStrength(cosine > 0.f ? 
+		Utiles::Vector3::Mul(m_strength, cosine) : XMFLOAT3{0.f,0.f,0.f});
+}
