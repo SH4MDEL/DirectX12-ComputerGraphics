@@ -46,15 +46,30 @@ void Scene::Update(FLOAT timeElapsed)
 	m_skybox->SetPosition(m_camera->GetEye());
 }
 
-void Scene::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
+void Scene::PreProcess(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
 {
 	m_camera->UpdateShaderVariable(commandList);
 	m_lightSystem->UpdateShaderVariable(commandList);
+	m_shadowMap->UpdateShaderVariable(commandList);
 
+	m_shaders.at("OBJECTSHADOW")->UpdateShaderVariable(commandList);
+	m_instanceObject->Render(commandList);
+
+	m_shaders.at("TERRAINSHADOW")->UpdateShaderVariable(commandList);
+	m_terrain->Render(commandList);
+
+	m_shaders.at("BILLBOARDSHADOW")->UpdateShaderVariable(commandList);
+	m_instanceBillboard->Render(commandList);
+
+	m_shadowMap->Close(commandList);
+}
+
+void Scene::Render(const ComPtr<ID3D12GraphicsCommandList>& commandList) const
+{
 	m_shaders.at("OBJECT")->UpdateShaderVariable(commandList);
 	m_instanceObject->Render(commandList);
 
-	m_shaders.at("DETAIL")->UpdateShaderVariable(commandList);
+	m_shaders.at("TERRAIN")->UpdateShaderVariable(commandList);
 	m_terrain->Render(commandList);
 
 	m_shaders.at("BILLBOARD")->UpdateShaderVariable(commandList);
@@ -85,9 +100,16 @@ inline void Scene::BuildShaders(const ComPtr<ID3D12Device>& device,
 	auto skyboxShader = make_shared<SkyboxShader>(device, rootSignature);
 	m_shaders.insert({ "SKYBOX", skyboxShader });
 	auto terrainShader = make_shared<TerrainShader>(device, rootSignature);
-	m_shaders.insert({ "DETAIL", terrainShader });
+	m_shaders.insert({ "TERRAIN", terrainShader });
 	auto billboardShader = make_shared<BillboardShader>(device, rootSignature);
 	m_shaders.insert({ "BILLBOARD", billboardShader });
+
+	auto objectShadowShader = make_shared<ObjectShadowShader>(device, rootSignature);
+	m_shaders.insert({ "OBJECTSHADOW", objectShadowShader });
+	auto billboardShadowShader = make_shared<BillboardShadowShader>(device, rootSignature);
+	m_shaders.insert({ "BILLBOARDSHADOW", billboardShadowShader });
+	auto terrainShadowShader = make_shared<TerrainShadowShader>(device, rootSignature);
+	m_shaders.insert({ "TERRAINSHADOW", terrainShadowShader });
 }
 
 inline void Scene::BuildMeshes(const ComPtr<ID3D12Device>& device,
@@ -141,6 +163,8 @@ inline void Scene::BuildTextures(const ComPtr<ID3D12Device>& device,
 		TEXT("../Resources/Textures/Grass04.dds"), RootParameter::Texture);
 	grassTexture->CreateShaderVariable(device);
 	m_textures.insert({ "GRASS", grassTexture });
+
+	m_shadowMap = make_unique<ShadowMap>(device, 4096 * 2, 4096 * 2);
 }
 
 inline void Scene::BuildMaterials(const ComPtr<ID3D12Device>& device, 
@@ -165,7 +189,7 @@ inline void Scene::BuildMaterials(const ComPtr<ID3D12Device>& device,
 inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 {
 	m_lightSystem = make_unique<LightSystem>(device);
-	auto sunLight = make_shared<DirectionalLight>();
+	auto sunLight = make_shared<DirectionalLight>(device);
 	m_lightSystem->SetDirectionalLight(sunLight);
 
 	m_sun = make_unique<Sun>(sunLight);
@@ -178,7 +202,7 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 	for (int x = -10; x <= 10; x += 5) {
 		for (int y = 0; y <= 20; y += 5) {
 			for (int z = -10; z <= 10; z += 5) {
-				auto light = make_shared<SpotLight>(
+				auto light = make_shared<SpotLight>(device,
 					XMFLOAT3{ 0.7f, 0.7f, 0.7f }, 
 					XMFLOAT3{ 1.f, 0.f, 0.f },
 					XMFLOAT3{ 0.f, 0.f, 0.f }, 
