@@ -1,1 +1,1 @@
-# DirectX12-ComputerGraphics
+# Computer Graphics with DirectX 12
