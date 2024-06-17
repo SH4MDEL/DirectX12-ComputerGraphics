@@ -166,7 +166,7 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 {
 	m_lightSystem = make_unique<LightSystem>(device);
 	auto sunLight = make_shared<DirectionalLight>();
-	m_lightSystem->SetDirectionalLight(sunLight);
+	m_lightSystem->SetLight(sunLight);
 
 	m_sun = make_unique<Sun>(sunLight);
 	m_sun->SetStrength(XMFLOAT3{ 1.3f, 1.2f, 1.2f });
@@ -175,15 +175,15 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 	m_player->SetPosition(XMFLOAT3{ 0.f, 0.f, 0.f });
 	m_player->SetTextureIndex(0);
 
-	for (int x = -10; x <= 10; x += 5) {
-		for (int y = 0; y <= 20; y += 5) {
-			for (int z = -10; z <= 10; z += 5) {
+	for (int x = -10; x <= 10; x += 10) {
+		for (int y = 0; y <= 20; y += 10) {
+			for (int z = -10; z <= 10; z += 10) {
 				auto light = make_shared<SpotLight>(
 					XMFLOAT3{ 0.7f, 0.7f, 0.7f }, 
 					XMFLOAT3{ 1.f, 0.f, 0.f },
 					XMFLOAT3{ 0.f, 0.f, 0.f }, 
 					1.f, 50.f, 80.f);
-				m_lightSystem->SetSpotLight(light);
+				m_lightSystem->SetLight(light);
 				auto object = make_shared<LightObject>(light);
 				object->SetPosition(XMFLOAT3{
 					static_cast<FLOAT>(x),

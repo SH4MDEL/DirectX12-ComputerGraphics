@@ -150,7 +150,7 @@ void Sun::SetStrength(XMFLOAT3 strength)
 
 void Sun::Update(FLOAT timeElapsed)
 {
-	m_phi += timeElapsed * 0.4f;
+	m_phi += timeElapsed * 0.1f;
 
 	FLOAT cosine = cos(m_phi);
 	XMFLOAT3 offset{
@@ -162,4 +162,5 @@ void Sun::Update(FLOAT timeElapsed)
 	m_light->SetDirection(Utiles::Vector3::Negate(GetPosition()));
 	m_light->SetStrength(cosine > 0.f ? 
 		Utiles::Vector3::Mul(m_strength, cosine) : XMFLOAT3{0.f,0.f,0.f});
+	//m_light->SetStrength(Utiles::Vector3::Mul(m_strength, cosine));
 }

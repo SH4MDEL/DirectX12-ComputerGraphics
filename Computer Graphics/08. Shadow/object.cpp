@@ -139,7 +139,7 @@ void LightObject::Update(FLOAT timeElapsed)
 }
 
 Sun::Sun(const shared_ptr<DirectionalLight>& light) : m_light{ light },
-m_strength{ 1.f, 1.f, 1.f }, m_phi{ 0.f }, m_theta{ 0.f }, m_radius{ Settings::SunRadius }
+m_strength{ 1.f, 1.f, 1.f }, m_phi{ XM_1DIV2PI + 0.5f }, m_theta{ XM_PIDIV4 }, m_radius{ Settings::SunRadius }
 {
 }
 
@@ -150,7 +150,7 @@ void Sun::SetStrength(XMFLOAT3 strength)
 
 void Sun::Update(FLOAT timeElapsed)
 {
-	m_phi += timeElapsed * 0.4f;
+	//m_phi += timeElapsed * 0.4f;
 
 	FLOAT cosine = cos(m_phi);
 	XMFLOAT3 offset{

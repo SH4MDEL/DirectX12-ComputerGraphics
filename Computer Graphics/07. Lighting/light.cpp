@@ -1,11 +1,36 @@
 #include "light.h"
 
-Light::Light() : m_strength{ 1.f, 1.f, 1.f }
+Light::Light(UINT type, XMFLOAT3 strength, XMFLOAT3 direction) :
+	m_type{type}, m_strength{strength}, m_direction{direction}, m_position{ 0.f, 0.f, 0.f },
+	m_fallOffStart{ 0.f }, m_fallOffEnd{ 0.f }, m_spotPower{ 0.f }
+{
+	m_direction = Utiles::Vector3::Normalize(m_direction);
+}
+
+Light::Light(UINT type, XMFLOAT3 strength, XMFLOAT3 position, 
+	FLOAT fallOffStart, FLOAT fallOffEnd) :
+	m_type{ type }, m_strength{ strength }, m_direction{ 0.f, 0.f, 0.f }, m_position{ position },
+	m_fallOffStart{ fallOffStart }, m_fallOffEnd{ fallOffEnd }, m_spotPower{ 0.f }
 {
 }
 
-Light::Light(XMFLOAT3 strength) : m_strength{ strength }
+Light::Light(UINT type, XMFLOAT3 strength, XMFLOAT3 direction, XMFLOAT3 position, 
+	FLOAT fallOffStart, FLOAT fallOffEnd, FLOAT spotPower) :
+	m_type{ type }, m_strength{ strength }, m_direction{ direction }, m_position{ position },
+	m_fallOffStart{ fallOffStart }, m_fallOffEnd{ fallOffEnd }, m_spotPower{ spotPower }
 {
+	m_direction = Utiles::Vector3::Normalize(m_direction);
+}
+
+void Light::UpdateShaderVariable(LightData& buffer)
+{
+	buffer.type = m_type;
+	buffer.strength = m_strength;
+	buffer.direction = m_direction;
+	buffer.position = m_position;
+	buffer.fallOffStart = m_fallOffStart;
+	buffer.fallOffEnd = m_fallOffEnd;
+	buffer.spotPower = m_spotPower;
 }
 
 void Light::SetStrength(XMFLOAT3 strength)
@@ -13,20 +38,14 @@ void Light::SetStrength(XMFLOAT3 strength)
 	m_strength = strength;
 }
 
-DirectionalLight::DirectionalLight() : Light(),
-	m_direction{ 0.f, -1.f, 0.f }
+DirectionalLight::DirectionalLight() :
+	Light(Settings::Light::Directional, { 1.f, 1.f, 1.f }, { 0.f, -1.f, 0.f })
 {
 }
 
-DirectionalLight::DirectionalLight(XMFLOAT3 strength, XMFLOAT3 direction) : Light(strength), m_direction{ direction }
+DirectionalLight::DirectionalLight(XMFLOAT3 strength, XMFLOAT3 direction) :
+	Light(Settings::Light::Directional, strength, direction)
 {
-	m_direction = Utiles::Vector3::Normalize(m_direction);
-}
-
-void DirectionalLight::UpdateShaderVariable(DirectionalLightData& buffer)
-{
-	buffer.strength = m_strength;
-	buffer.direction = m_direction;
 }
 
 void DirectionalLight::SetDirection(XMFLOAT3 direction)
@@ -34,22 +53,14 @@ void DirectionalLight::SetDirection(XMFLOAT3 direction)
 	m_direction = Utiles::Vector3::Normalize(direction);
 }
 
-PointLight::PointLight() : Light(),
-	m_position{ 0.f, 0.f, 0.f }, m_fallOffStart{ 0.1f }, m_fallOffEnd{ 10.f }
+PointLight::PointLight() : 
+	Light(Settings::Light::Point, {1.f, 1.f, 1.f}, { 0.f, 0.f, 0.f }, { 0.1f }, { 10.f })
 {
 }
 
 PointLight::PointLight(XMFLOAT3 strength, XMFLOAT3 position, FLOAT fallOffStart, FLOAT fallOffEnd) :
-	Light(strength), m_position {position}, m_fallOffStart{fallOffStart}, m_fallOffEnd{fallOffEnd}
+	Light(Settings::Light::Point, strength, position, fallOffStart, fallOffEnd)
 {
-}
-
-void PointLight::UpdateShaderVariable(PointLightData& buffer)
-{
-	buffer.strength = m_strength;
-	buffer.position = m_position;
-	buffer.fallOffStart = m_fallOffStart;
-	buffer.fallOffEnd = m_fallOffEnd;
 }
 
 void PointLight::SetPosition(XMFLOAT3 position)
@@ -68,28 +79,16 @@ void PointLight::SetFallOffEnd(FLOAT fallOffEnd)
 }
 
 SpotLight::SpotLight() :
-	Light(), m_direction{ 0.f, 1.f, 0.f }, m_position{ 0.f, 0.f, 0.f },
-	m_fallOffStart{ 0.1f }, m_fallOffEnd{ 10.f }, m_spotPower{ 10.f }
+	Light(Settings::Light::Spot, { 1.f, 1.f, 1.f }, {0.f, -1.f, 0.f}, 
+		{ 0.f, 0.f, 0.f }, { 0.1f }, { 10.f }, {10.f})
 {
-	m_direction = Utiles::Vector3::Normalize(m_direction);
 }
 
 SpotLight::SpotLight(XMFLOAT3 strength, XMFLOAT3 direction, XMFLOAT3 position, 
 	FLOAT fallOffStart, FLOAT fallOffEnd, FLOAT spotPower) :
-	Light(strength), m_direction{direction}, m_position{position},
-	m_fallOffStart{fallOffStart}, m_fallOffEnd{fallOffEnd}, m_spotPower{spotPower}
+	Light(Settings::Light::Spot, strength, direction, position, 
+		fallOffStart, fallOffEnd, spotPower)
 {
-	m_direction = Utiles::Vector3::Normalize(m_direction);
-}
-
-void SpotLight::UpdateShaderVariable(SpotLightData& buffer)
-{
-	buffer.strength = m_strength;
-	buffer.direction = m_direction;
-	buffer.position = m_position;
-	buffer.fallOffStart = m_fallOffStart;
-	buffer.fallOffEnd = m_fallOffEnd;
-	buffer.spotPower = m_spotPower;
 }
 
 void SpotLight::SetDirection(XMFLOAT3 direction)
@@ -117,43 +116,25 @@ void SpotLight::SetSpotPower(FLOAT spotPower)
 	m_spotPower = spotPower;
 }
 
-LightSystem::LightSystem(const ComPtr<ID3D12Device>& device) : m_lightNum{ 0, 0, 0, 0 }
+LightSystem::LightSystem(const ComPtr<ID3D12Device>& device)
 {
-	m_constantBuffer = make_unique<UploadBuffer<LightData>>(device, (UINT)RootParameter::Light);
+	m_constantBuffer = make_unique<UploadBuffer<LightsData>>(device, (UINT)RootParameter::Light);
 }
 
 void LightSystem::UpdateShaderVariable(const ComPtr<ID3D12GraphicsCommandList>& commandList)
 {
-	LightData buffer;
-	buffer.lightNum = m_lightNum;
-	for (int i = 0; const auto& directionalLight : m_directionalLights) {
-		directionalLight->UpdateShaderVariable(buffer.directionalLights[i++]); }
-	for (int i = 0; const auto& pointLight : m_pointLights) {
-		pointLight->UpdateShaderVariable(buffer.pointLights[i++]); }
-	for (int i = 0; const auto& spotLight : m_spotLights) {
-		spotLight->UpdateShaderVariable(buffer.spotLights[i++]); }
-	m_constantBuffer->Copy(buffer);
+	LightsData buffer;
+	int i = 0;
+	for (const auto& light : m_lights) {
+		light->UpdateShaderVariable(buffer.lights[i++]); }
+	if (i != Settings::Light::MaxLight) buffer.lights[i].type = Settings::Light::Last;
 
+	m_constantBuffer->Copy(buffer);
 	m_constantBuffer->UpdateRootConstantBuffer(commandList);
 }
 
-void LightSystem::SetDirectionalLight(shared_ptr<DirectionalLight> directionalLight)
+void LightSystem::SetLight(const shared_ptr<Light>& light)
 {
-	if (m_directionalLights.size() == Settings::MaxDirectionalLight) assert("");
-	m_directionalLights.push_back(directionalLight);
-	m_lightNum.x = static_cast<UINT>(m_directionalLights.size());
-}
-
-void LightSystem::SetPointLight(shared_ptr<PointLight> pointLight)
-{
-	if (m_pointLights.size() == Settings::MaxPointLight) assert("");
-	m_pointLights.push_back(pointLight);
-	m_lightNum.y = static_cast<UINT>(m_pointLights.size());
-}
-
-void LightSystem::SetSpotLight(shared_ptr<SpotLight> spotLight)
-{
-	if (m_spotLights.size() == Settings::MaxSpotLight) assert("");
-	m_spotLights.push_back(spotLight);
-	m_lightNum.z = static_cast<UINT>(m_spotLights.size());
+	if (m_lights.size() == Settings::Light::MaxLight) throw out_of_range("Limit Max Light");
+	m_lights.push_back(light);
 }

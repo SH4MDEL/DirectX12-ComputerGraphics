@@ -16,9 +16,14 @@ namespace Settings
 
     constexpr FLOAT PlayerSpeed = 10.f;
 
-    constexpr UINT MaxDirectionalLight = 5;
-    constexpr UINT MaxPointLight = 10;
-    constexpr UINT MaxSpotLight = 130;
+    namespace Light
+    {
+        constexpr UINT MaxLight = 100;
+        constexpr UINT Directional = 0;
+        constexpr UINT Point = 1;
+        constexpr UINT Spot = 2;
+        constexpr UINT Last = 3;
+    }
 }
 
 namespace RootParameter

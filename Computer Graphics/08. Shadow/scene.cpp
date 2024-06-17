@@ -199,9 +199,9 @@ inline void Scene::BuildObjects(const ComPtr<ID3D12Device>& device)
 	m_player->SetPosition(XMFLOAT3{ 0.f, 0.f, 0.f });
 	m_player->SetTextureIndex(0);
 
-	for (int x = -10; x <= 10; x += 5) {
-		for (int y = 0; y <= 20; y += 5) {
-			for (int z = -10; z <= 10; z += 5) {
+	for (int x = -10; x <= 10; x += 10) {
+		for (int y = 0; y <= 20; y += 10) {
+			for (int z = -10; z <= 10; z += 10) {
 				auto light = make_shared<SpotLight>(device,
 					XMFLOAT3{ 0.7f, 0.7f, 0.7f }, 
 					XMFLOAT3{ 1.f, 0.f, 0.f },

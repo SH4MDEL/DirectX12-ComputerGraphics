@@ -19,6 +19,14 @@ namespace Settings
     constexpr UINT MaxDirectionalLight = 5;
     constexpr UINT MaxPointLight = 10;
     constexpr UINT MaxSpotLight = 130;
+
+    namespace Light
+    {
+        constexpr UINT MaxLight = 30;
+        constexpr UINT Directional = 0;
+        constexpr UINT Point = 1;
+        constexpr UINT Spot = 2;
+    }
 }
 
 namespace RootParameter

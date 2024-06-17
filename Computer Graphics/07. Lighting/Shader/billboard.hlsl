@@ -61,8 +61,7 @@ void GEOMETRY_MAIN(point GEOMETRY_INPUT input[1],
         output.position = mul(vertices[i], g_viewMatrix);
         output.position = mul(output.position, g_projectionMatrix);
         output.positionW = vertices[i].xyz;
-        float3 side = normalize(vertices[i].xyz - center);
-        output.normal = normalize(front + side);
+        output.normal = front;
         output.uv = uv[i];
         output.textureIndex = input[0].textureIndex;
         output.materialIndex = input[0].materialIndex;
